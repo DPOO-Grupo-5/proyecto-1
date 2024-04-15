@@ -1,0 +1,25 @@
+usuario
+
+infoUsuario : login(String) : password(String) : nombre (String) : rol(String)
+infoCliente : telefono(String) : email(String) : verificado(boolean) : capacidadAdquisitiva(double) : maximoCompras(double)
+pieza : codigo : consignacion(boolean)
+compra : codigo(String)
+oferta : codigo(String)
+
+
+piezas
+
+pintura : codigo(String) : estado(String) : titulo(String) : year(String) : lugar(String) : autor(String) : alto(double) : ancho(double) : precio(double) : tecnicas(String) : 	peso(double)
+escultura : codigo(String) : estado(String) : titulo(String) : year(String) : lugar(String) : autor(String) : alto(double) : ancho(double) : precio(double) : 	profundidad(double) : materiales(String) : peso(double) : electricidad(boolean) : detalles(String)
+video : codigo(String) : estado(String) : titulo(String) : year(String) : lugar(String) : autor(String) : alto(double) : ancho(double) : precio(double) : duracion(int) : 	resolucion(String) : size(int) : formato(String)
+fotografia : codigo(String) : estado(String) : titulo(String) : year(String) : lugar(String) : autor(String) : alto(double) : ancho(double) : precio(double) : 	resolucion(String) : size(int) : formato(String)
+impresion : codigo(String) : estado(String) : titulo(String) : year(String) : lugar(String) : autor(String) : alto(double) : ancho(double) : precio(double) : 	material(String) : tipoImpresion(String)
+otro :codigo(String): estado(String) : titulo(String) : year(String) : lugar(String) : autor(String) : alto(double) : ancho(double) : precio(double)
+
+
+acciones
+
+subasta: codigo(String) : pieza(String) : valorInicial(double) : valorMinimo(double) : valorActual(double) : valorGanador(double) : tiempoInicial(String) : 	tiempoFinal(String) : activa(boolean)
+venta : codigo(String) : pieza(String) : aceptada(boolean) : activa(boolean) : fecha(String)
+consignacion : codigo(String) : pieza(String) : fechaInicio(String) : fechaFinal(String) : activa(boolean)
+oferta: codigo(String) : subasta(String) : valor(double) : fecha(String)
