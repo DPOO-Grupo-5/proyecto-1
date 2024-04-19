@@ -12,7 +12,7 @@ import galeria.modelo.usuario.Cliente;
 import galeria.modelo.usuario.Usuario;
 
 
-public class PersistenciaAcciones
+public class PersistenciaAcciones implements IPersistenciaAcciones
 {
 	public static Usuario cargarUsuario(File archivo)
 	{

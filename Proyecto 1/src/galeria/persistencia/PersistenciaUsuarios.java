@@ -20,7 +20,7 @@ import galeria.modelo.usuario.Usuario;
 public class PersistenciaUsuarios implements IPersistenciaUsuarios
 {
 	@Override
-	public void cargarUsuario(File archivo, Galeria galeria)
+	public void cargarUsuarios(File archivo, Galeria galeria)
 	{
 		Map<String, Cliente> usuarios = new HashMap<String, Cliente>( );
         
@@ -58,7 +58,7 @@ public class PersistenciaUsuarios implements IPersistenciaUsuarios
 	}
 	
 	@Override
-	public void salvarUsuario(File archivo, Galeria galeria)
+	public void salvarUsuarios(File archivo, Galeria galeria)
 	{
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
             for (Usuario usuario : galeria.getUsuarios()) {

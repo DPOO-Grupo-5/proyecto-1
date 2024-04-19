@@ -6,7 +6,7 @@ import galeria.modelo.Galeria;
 
 public interface IPersistenciaUsuarios
 {
-	void cargarUsuario(File archivo, Galeria galeria);
+	void cargarUsuarios(File archivo, Galeria galeria);
 	
-	void salvarUsuario(File archivo, Galeria galeria);
+	void salvarUsuarios(File archivo, Galeria galeria);
 }

@@ -1,8 +1,16 @@
 package galeria.persistencia;
 
 import java.io.File;
+import java.io.IOException;
 
 import galeria.modelo.Galeria;
+import galeria.persistencia.IPersistenciaUsuarios;
+import galeria.persistencia.IPersistenciaPiezas;
+import galeria.persistencia.IPersistenciaAcciones;
+import galeria.persistencia.PersistenciaUsuarios;
+import galeria.persistencia.PersistenciaPiezas;
+import galeria.persistencia.PersistenciaAcciones;
+import galeria.persistencia.TipoInvalidoException;
 
 /**
  * Esta clase cumple el rol de una fábrica de componentes que se encargan de manejar la persistencia de una aerolínea y de sus tiquetes
@@ -19,6 +27,7 @@ public class CentralPersistencia
      * @return El objeto que debería usarse para cargar y salvar la información
      * @throws TipoInvalidoException Se lanza esta excepción si se utiliza un tipo de archivo que no es válido
      */
+/*
 	private IPersistenciaUsuarios persistenciaUsuarios;
     private IPersistenciaPiezas persistenciaPiezas;
     private IPersistenciaAcciones persistenciaAcciones;
@@ -35,16 +44,16 @@ public class CentralPersistencia
             String nombreArchivo = archivo.getName();
             String tipoArchivo = nombreArchivo.substring(nombreArchivo.lastIndexOf(".") + 1);
 
-            try {
-                switch (tipoArchivo) {
+           try {
+               switch (tipoArchivo) {
                     case "usuarios":
-                        persistenciaUsuarios.cargarUsuario(archivo);
+                        persistenciaUsuarios.cargarUsuarios(archivo, galeria);
                         break;
                     case "piezas":
-                        persistenciaPiezas.cargarPieza(archivo);
+                        persistenciaPiezas.cargarPiezas(archivo, galeria);
                         break;
                     case "acciones":
-                        persistenciaAcciones.cargarAccion(archivo);
+                        persistenciaAcciones.cargarAcciones(archivo, galeria);
                         break;
                     default:
                         System.err.println("Tipo de archivo no reconocido: " + tipoArchivo);
@@ -59,8 +68,54 @@ public class CentralPersistencia
     {
         Galeria galeria = new Galeria();
 
-        persistenciaUsuarios.cargarUsuario(new File(directorio, "usuarios"), galeria);
-        persistenciaPiezas.cargarPieza(new File(directorio, "piezas"), galeria);
-        persistenciaAcciones.cargarAccion(new File(directorio, "acciones");
+        persistenciaUsuarios.cargarUsuarios(new File(directorio, "usuarios"), galeria);
+        persistenciaPiezas.cargarPiezas(new File(directorio, "piezas"), galeria);
+        persistenciaAcciones.cargarAcciones(new File(directorio, "acciones");
+    }
+*/ 
+	/**
+     * La cadena utilizada para identificar a los archivos en formato JSON
+     */
+    public static final String JSON = "JSON";
+
+    /**
+     * La cadena utilizada para identificar a los archivos en texto plano
+     */
+    public static final String PLAIN = "PlainText";
+    
+    
+    public static IPersistenciaUsuarios getPersistenciaUsuarios( String tipoArchivo ) throws TipoInvalidoException
+    {
+    	return new PersistenciaUsuarios( );
+    }
+
+    /**
+     * Este método retorna una nueva instancia de una clase capaz de cargar y salvar los datos de los tiquetes de una aerolínea
+     * 
+     * La única clase concreta que se puede retornar es PersistenciaTiquetesJson
+     * 
+     * @param tipoArchivo El tipo del archivo que será usado para cargar la información de los tiquetes
+     * @return  El objeto que debería usarse para cargar y salvar la información
+     * @throws TipoInvalidoException Se lanza esta excepción si se utiliza un tipo de archivo que no es válido
+     */
+    public static IPersistenciaPiezas getPersistenciaPiezas( String tipoArchivo ) throws TipoInvalidoException
+    {
+        return new PersistenciaPiezas( );
+
+    }
+    
+    /**
+     * Este método retorna una nueva instancia de una clase capaz de cargar y salvar los datos de los tiquetes de una aerolínea
+     * 
+     * La única clase concreta que se puede retornar es PersistenciaTiquetesJson
+     * 
+     * @param tipoArchivo El tipo del archivo que será usado para cargar la información de los tiquetes
+     * @return  El objeto que debería usarse para cargar y salvar la información
+     * @throws TipoInvalidoException Se lanza esta excepción si se utiliza un tipo de archivo que no es válido
+     */
+    public static IPersistenciaAcciones getPersistenciaAcciones( String tipoArchivo ) throws TipoInvalidoException
+    {
+        return new PersistenciaAcciones( );
+
     }
 }

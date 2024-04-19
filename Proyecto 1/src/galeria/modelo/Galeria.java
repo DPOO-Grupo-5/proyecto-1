@@ -1,4 +1,6 @@
 package galeria.modelo;
+
+import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +13,10 @@ import galeria.modelo.usuario.Usuario;
 import galeria.modelo.ventas.Oferta;
 import galeria.modelo.ventas.SubastaPieza;
 import galeria.modelo.ventas.Venta;
+import galeria.persistencia.CentralPersistencia;
+import galeria.persistencia.IPersistenciaPiezas;
+import galeria.persistencia.IPersistenciaUsuarios;
+import galeria.persistencia.IPersistenciaAcciones;
 
 /**
  * Esta clase se encarga de realizar la mayoria de las actividades del funionamiento de la galeria.
@@ -339,6 +345,89 @@ public class Galeria {
 		return false;
 		//excep
 	}
+	
+	/**
+     * Carga toda la información de la aerolínea a partir de un archivo
+     * @param archivo El nombre del archivo.
+     * @param tipoArchivo El tipo del archivo. Puede ser CentralPersistencia.JSON o CentralPersistencia.PLAIN.
+     * @throws TipoInvalidoException Se lanza esta excepción si se indica un tipo de archivo inválido
+     * @throws IOException Lanza esta excepción si hay problemas leyendo el archivo
+     * @throws InformacionInconsistenteException Lanza esta excepción si durante la carga del archivo se encuentra información que no es consistente
+     */
+    public void cargarUsuarios( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, InformacionInconsistenteException
+    {
+    	IPersistenciaUsuarios cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+        cargador.cargarUsuarios( archivo, this );
+    }
+
+    /**
+     * Salva la información de la aerlínea en un archivo
+     * @param archivo El nombre del archivo.
+     * @param tipoArchivo El tipo del archivo. Puede ser CentralPersistencia.JSON o CentralPersistencia.PLAIN.
+     * @throws TipoInvalidoException Se lanza esta excepción si se indica un tipo de archivo inválido
+     * @throws IOException Lanza esta excepción si hay problemas escribiendo en el archivo
+     */
+    public void salvarUsuarios( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException
+    {
+    	IPersistenciaUsuarios cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+        cargador.salvarUsuarios( archivo, this );
+    }
+
+    /**
+     * Carga toda la información de sobre los clientes y tiquetes de una aerolínea a partir de un archivo
+     * @param archivo El nombre del archivo.
+     * @param tipoArchivo El tipo del archivo. Puede ser CentralPersistencia.JSON o CentralPersistencia.PLAIN.
+     * @throws TipoInvalidoException Se lanza esta excepción si se indica un tipo de archivo inválido
+     * @throws IOException Lanza esta excepción si hay problemas leyendo el archivo
+     * @throws InformacionInconsistenteException Lanza esta excepción si durante la carga del archivo se encuentra información que no es consistente con la información de la
+     *         aerolínea
+     */
+    public void cargarPiezas( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, InformacionInconsistenteException
+    {
+        IPersistenciaPiezas cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+        cargador.cargarPiezas( archivo, this );
+    }
+
+    /**
+     * Salva la información de la aerlínea en un archivo
+     * @param archivo El nombre del archivo.
+     * @param tipoArchivo El tipo del archivo. Puede ser CentralPersistencia.JSON o CentralPersistencia.PLAIN.
+     * @throws TipoInvalidoException Se lanza esta excepción si se indica un tipo de archivo inválido
+     * @throws IOException Lanza esta excepción si hay problemas escribiendo en el archivo
+     */
+    public void salvarPiezas( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException
+    {
+        IPersistenciaPiezas cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+        cargador.salvarPiezas( archivo, this );
+    }
+    
+    /**
+     * Carga toda la información de sobre los clientes y tiquetes de una aerolínea a partir de un archivo
+     * @param archivo El nombre del archivo.
+     * @param tipoArchivo El tipo del archivo. Puede ser CentralPersistencia.JSON o CentralPersistencia.PLAIN.
+     * @throws TipoInvalidoException Se lanza esta excepción si se indica un tipo de archivo inválido
+     * @throws IOException Lanza esta excepción si hay problemas leyendo el archivo
+     * @throws InformacionInconsistenteException Lanza esta excepción si durante la carga del archivo se encuentra información que no es consistente con la información de la
+     *         aerolínea
+     */
+    public void cargarAcciones( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, InformacionInconsistenteException
+    {
+        IPersistenciaAcciones cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+        cargador.cargarAcciones( archivo, this );
+    }
+
+    /**
+     * Salva la información de la aerlínea en un archivo
+     * @param archivo El nombre del archivo.
+     * @param tipoArchivo El tipo del archivo. Puede ser CentralPersistencia.JSON o CentralPersistencia.PLAIN.
+     * @throws TipoInvalidoException Se lanza esta excepción si se indica un tipo de archivo inválido
+     * @throws IOException Lanza esta excepción si hay problemas escribiendo en el archivo
+     */
+    public void salvarAcciones( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException
+    {
+        IPersistenciaAcciones cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+        cargador.salvarAcciones( archivo, this );
+    }
 }
 
 

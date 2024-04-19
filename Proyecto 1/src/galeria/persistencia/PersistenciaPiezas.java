@@ -13,7 +13,7 @@ import galeria.modelo.usuario.Cliente;
 import galeria.modelo.usuario.Usuario;
 
 
-public class PersistenciaPiezas
+public class PersistenciaPiezas implements IPersistenciaPiezas
 {
 	public static Usuario cargarUsuario(File archivo)
 	{
