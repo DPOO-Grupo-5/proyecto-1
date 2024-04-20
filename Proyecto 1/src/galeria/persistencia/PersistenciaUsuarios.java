@@ -46,7 +46,7 @@ public class PersistenciaUsuarios implements IPersistenciaUsuarios
             String[] piezasSep = piezasString.split(",");
 
             for (String element : piezasSep) {
-                piezas.add(Pieza.ConsultarPieza(element.trim()));
+                piezas.add(Galeria.ConsultarPieza(element.trim()));
             }
             
             usuarios.put( login, new Cliente(rol, login, password, nombre, valorMaximo, verificado, telefono, email, capacidadAdquisitiva, piezas) );

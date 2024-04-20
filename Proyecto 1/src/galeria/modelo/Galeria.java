@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import galeria.excepciones.InformacionInconsistenteException;
 import galeria.modelo.pieza.Estado;
 import galeria.modelo.pieza.Pieza;
 import galeria.modelo.usuario.Cliente;
@@ -16,6 +17,7 @@ import galeria.modelo.ventas.Venta;
 import galeria.persistencia.CentralPersistencia;
 import galeria.persistencia.IPersistenciaPiezas;
 import galeria.persistencia.IPersistenciaUsuarios;
+import galeria.persistencia.TipoInvalidoException;
 import galeria.persistencia.IPersistenciaAcciones;
 
 /**
@@ -356,7 +358,7 @@ public class Galeria {
      */
     public void cargarUsuarios( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, InformacionInconsistenteException
     {
-    	IPersistenciaUsuarios cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+    	IPersistenciaUsuarios cargador = CentralPersistencia.getPersistenciaUsuarios( tipoArchivo );
         cargador.cargarUsuarios( archivo, this );
     }
 
@@ -369,7 +371,7 @@ public class Galeria {
      */
     public void salvarUsuarios( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException
     {
-    	IPersistenciaUsuarios cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+    	IPersistenciaUsuarios cargador = CentralPersistencia.getPersistenciaUsuarios( tipoArchivo );
         cargador.salvarUsuarios( archivo, this );
     }
 
@@ -384,7 +386,7 @@ public class Galeria {
      */
     public void cargarPiezas( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, InformacionInconsistenteException
     {
-        IPersistenciaPiezas cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+        IPersistenciaPiezas cargador = CentralPersistencia.getPersistenciaPiezas( tipoArchivo );
         cargador.cargarPiezas( archivo, this );
     }
 
@@ -397,7 +399,7 @@ public class Galeria {
      */
     public void salvarPiezas( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException
     {
-        IPersistenciaPiezas cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+        IPersistenciaPiezas cargador = CentralPersistencia.getPersistenciaPiezas( tipoArchivo );
         cargador.salvarPiezas( archivo, this );
     }
     
@@ -412,7 +414,7 @@ public class Galeria {
      */
     public void cargarAcciones( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, InformacionInconsistenteException
     {
-        IPersistenciaAcciones cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+        IPersistenciaAcciones cargador = CentralPersistencia.getPersistenciaAcciones( tipoArchivo );
         cargador.cargarAcciones( archivo, this );
     }
 
@@ -425,7 +427,7 @@ public class Galeria {
      */
     public void salvarAcciones( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException
     {
-        IPersistenciaAcciones cargador = CentralPersistencia.getPersistenciaTiquetes( tipoArchivo );
+        IPersistenciaAcciones cargador = CentralPersistencia.getPersistenciaAcciones( tipoArchivo );
         cargador.salvarAcciones( archivo, this );
     }
 }

@@ -21,8 +21,14 @@ public class ConsolaPrincipal extends ConsolaBasica
         {
             galeria = new Galeria( );
             // String archivo = this.pedirCadenaAlUsuario( "Digite el nombre del archivo json con la información de una aerolinea" );
-            String archivo = "tiquetes.json"; 
-            galeria.cargarTiquetes( "./datos/" + archivo, CentralPersistencia.JSON );
+            String archivoUsuarios = "usuarios.json"; 
+            galeria.cargarUsuarios( "./datos/" + archivoUsuarios, CentralPersistencia.PLAIN );
+            
+            String archivoPiezas = "piezas.json"; 
+            galeria.cargarUsuarios( "./datos/" + archivoPiezas, CentralPersistencia.PLAIN );
+            
+            String archivoAcciones = "acciones.json"; 
+            galeria.cargarUsuarios( "./datos/" + archivoAcciones, CentralPersistencia.PLAIN );
         }
         catch( TipoInvalidoException e )
         {

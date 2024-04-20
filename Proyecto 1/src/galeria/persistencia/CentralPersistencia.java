@@ -86,7 +86,10 @@ public class CentralPersistencia
     
     public static IPersistenciaUsuarios getPersistenciaUsuarios( String tipoArchivo ) throws TipoInvalidoException
     {
-    	return new PersistenciaUsuarios( );
+    	if( PLAIN.equals( tipoArchivo ) )
+    		return new PersistenciaUsuarios( );
+    	else
+            throw new TipoInvalidoException( tipoArchivo );
     }
 
     /**
@@ -100,7 +103,10 @@ public class CentralPersistencia
      */
     public static IPersistenciaPiezas getPersistenciaPiezas( String tipoArchivo ) throws TipoInvalidoException
     {
-        return new PersistenciaPiezas( );
+    	if( PLAIN.equals( tipoArchivo ) )
+    		return new PersistenciaPiezas( );
+    	else
+            throw new TipoInvalidoException( tipoArchivo );
 
     }
     
@@ -115,7 +121,10 @@ public class CentralPersistencia
      */
     public static IPersistenciaAcciones getPersistenciaAcciones( String tipoArchivo ) throws TipoInvalidoException
     {
-        return new PersistenciaAcciones( );
+    	if( PLAIN.equals( tipoArchivo ) )
+    		return new PersistenciaAcciones( );
+    	else
+            throw new TipoInvalidoException( tipoArchivo );
 
     }
 }
