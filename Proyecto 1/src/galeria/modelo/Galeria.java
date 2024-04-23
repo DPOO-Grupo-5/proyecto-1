@@ -9,6 +9,7 @@ import galeria.excepciones.InformacionInconsistenteException;
 import galeria.modelo.pieza.Estado;
 import galeria.modelo.pieza.Pieza;
 import galeria.modelo.usuario.Cliente;
+import galeria.modelo.usuario.Empleado;
 import galeria.modelo.usuario.Rol;
 import galeria.modelo.usuario.Usuario;
 import galeria.modelo.ventas.Oferta;
@@ -54,7 +55,7 @@ public class Galeria {
 	public List<Usuario> getUsuarios() {
 		return usuarios;
 	}
-	public void setUsuarios(List<Usuario> usuarios) {
+	public void setClientes(List<Usuario> usuarios) {
 		this.usuarios = usuarios;
 	}
 	public List<Pieza> getInventario() {
@@ -287,8 +288,8 @@ public class Galeria {
      * Registra un usuario en la lista de usuarios de la galeria
      * @param usuario que se registra en la galeria
     */
-	public void RegistrarOperador (Usuario usuario) {
-		usuarios.add(usuario);
+	public void RegistrarEmpleado (Empleado empleado) {
+		usuarios.add(empleado);
 	}
 	
 	/**

@@ -16,14 +16,19 @@ public abstract class Usuario {
 	 * Esta clase modela a los clientes de la galeria, tanto los propietarios como los compradores
 	 */
 	private String password;
+	/**
+	 * Esta clase modela a los clientes de la galeria, tanto los propietarios como los compradores
+	 */
+	private String nombre;
 	
 	/**
 	 * Crea un usuario indicando su rol, login y contraseña
 	 */
-	public Usuario(Rol rol, String login, String password) {
+	public Usuario(Rol rol, String login, String password, String nombre) {
 		this.rol = rol;
 		this.login = login;
 		this.password = password;
+		this.setNombre(nombre);
 	}
 	
 	public Rol getRol() {
@@ -43,6 +48,14 @@ public abstract class Usuario {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 	
 }

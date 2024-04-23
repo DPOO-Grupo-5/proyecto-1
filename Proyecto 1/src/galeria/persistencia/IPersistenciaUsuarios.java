@@ -1,12 +1,12 @@
 package galeria.persistencia;
 
-import java.io.File;
+import java.io.IOException;
 
 import galeria.modelo.Galeria;
 
 public interface IPersistenciaUsuarios
 {
-	void cargarUsuarios(String archivo, Galeria galeria);
+	void cargarUsuarios(String archivo, Galeria laGaleria) throws IOException;
 	
-	void salvarUsuarios(String archivo, Galeria galeria);
+	void salvarUsuarios(String archivo, Galeria laGaleria) throws IOException;
 }

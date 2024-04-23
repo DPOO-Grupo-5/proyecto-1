@@ -1,5 +1,7 @@
 package galeria.modelo.usuario;
 
+import java.util.LinkedList;
+
 /**
  * Esta clase modela a los clientes de la galeria, tanto los propietarios como los compradores
  */
@@ -29,8 +31,8 @@ public class Cliente extends Usuario
 	/**
      * Construye un nuevo cliente, ingresa los valores
      */
-	public Cliente(String login, String password, String telefono, String email, double capacidadAdquisitiva) {
-		super(Rol.CLIENTE, login, password);
+	public Cliente(String login, String password, String nombre, String telefono, String email, double capacidadAdquisitiva, LinkedList<String> piezas) {
+		super(Rol.CLIENTE, login, password, nombre);
 		this.valorMaximo = 0;
 		this.verificado = false;
 		this.telefono = telefono;
