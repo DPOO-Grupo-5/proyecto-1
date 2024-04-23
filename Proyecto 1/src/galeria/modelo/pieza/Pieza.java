@@ -20,7 +20,7 @@ public abstract class Pieza {
 	/**
 	 * Año de creacion de la obra
 	 */
-	private Date yearCreacion;
+	private String yearCreacion;
 	/**
 	 * Lugar donde se elaboro la obra
 	 */
@@ -73,7 +73,7 @@ public abstract class Pieza {
 	/**
      * Construye una pieza y asigna los valores a sus atributos. Constructor utilizado cuando no se encuentre disponible para venta directa por un valor fijo y no sea adquirida en consignacion
      */
-	public Pieza(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Pieza(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, Tipo tipo) {
 		this.codigo = codigo;
 		this.titulo = titulo;
@@ -94,7 +94,7 @@ public abstract class Pieza {
 	/**
      * Construye una pieza y asigna los valores a sus atributos. Constructor utilizado cuando no sea adquirida en consignacion
      */
-	public Pieza(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Pieza(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, Tipo tipo, boolean disponibilidadVentaDirecta,
 			double valorFijoVentaDirecta) {
 		this.codigo = codigo;
@@ -116,7 +116,7 @@ public abstract class Pieza {
 	/**
      * Construye una pieza de tipo y asigna los valores a sus atributos. Constructor utilizado cuando se encuentre disponible para venta directa por un valor fijo y sea adquirida en consignacion
      */
-	public Pieza(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Pieza(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, Tipo tipo, boolean disponibilidadVentaDirecta,
 			double valorFijoVentaDirecta, boolean esConsignacion, Date fechaInicioConsignacion,
 			Date fechaFinConsignacion, Usuario propietario) {
@@ -149,10 +149,10 @@ public abstract class Pieza {
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
-	public Date getYearCreacion() {
+	public String getYearCreacion() {
 		return yearCreacion;
 	}
-	public void setYearCreacion(Date yearCreacion) {
+	public void setYearCreacion(String yearCreacion) {
 		this.yearCreacion = yearCreacion;
 	}
 	public String getLugarCreacion() {

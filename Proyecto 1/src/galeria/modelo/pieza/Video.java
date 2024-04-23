@@ -30,9 +30,8 @@ public class Video extends Pieza
 	/**
      * Construye una pieza de tipo video y asigna los valores a sus atributos. Constructor utilizado cuando no se encuentre disponible para venta directa por un valor fijo y no sea adquirida en consignacion
      */
-	public Video(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
-			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta, int duracion,
-			String resolucion, int tamano, String formato) {
+	public Video(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
+			Estado estado, double alto, double ancho, int duracion, String resolucion, int tamano, String formato) {
 		super(codigo, titulo, yearCreacion, lugarCreacion, autor, estado, alto, ancho, Tipo.VIDEO);
 		this.duracion = duracion;
 		this.resolucion = resolucion;
@@ -42,7 +41,7 @@ public class Video extends Pieza
 	/**
      * Construye una pieza de tipo video y asigna los valores a sus atributos. Constructor utilizado cuando no sea adquirida en consignacion
      */
-	public Video(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Video(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
 			double valorFijoVentaDirecta, int duracion, String resolucion, int tamano, String formato) {
 		super(codigo, titulo, yearCreacion, lugarCreacion, autor, estado, alto, ancho, Tipo.VIDEO, disponibilidadVentaDirecta,
@@ -55,7 +54,7 @@ public class Video extends Pieza
 	/**
      * Construye una pieza de tipo video y asigna los valores a sus atributos. Constructor utilizado cuando se encuentre disponible para venta directa por un valor fijo y sea adquirida en consignacion
      */
-	public Video(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Video(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
 			double valorFijoVentaDirecta, boolean esConsignacion, Date fechaInicioConsignacion,
 			Date fechaFinConsignacion, Usuario propietarioConsignacion, int duracion, String resolucion, int tamano,

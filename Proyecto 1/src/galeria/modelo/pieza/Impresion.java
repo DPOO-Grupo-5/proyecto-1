@@ -19,8 +19,8 @@ public class Impresion extends Pieza
 	/**
      * Construye una pieza de tipo impresion y asigna los valores a sus atributos. Constructor utilizado cuando no se encuentre disponible para venta directa por un valor fijo y no sea adquirida en consignacion
      */
-	public Impresion(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
-			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta, String material,
+	public Impresion(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
+			Estado estado, double alto, double ancho, String material,
 			String tipoImpresion) {
 		super(codigo, titulo, yearCreacion, lugarCreacion, autor, estado, alto, ancho, Tipo.IMPRESION);
 		this.material = material;
@@ -30,7 +30,7 @@ public class Impresion extends Pieza
 	/**
      * Construye una pieza de tipo impresion y asigna los valores a sus atributos. Constructor utilizado cuando no sea adquirida en consignacion
      */
-	public Impresion(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Impresion(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
 			double valorFijoVentaDirecta, String material, String tipoImpresion) {
 		super(codigo, titulo, yearCreacion, lugarCreacion, autor, estado, alto, ancho, Tipo.IMPRESION, disponibilidadVentaDirecta,
@@ -42,7 +42,7 @@ public class Impresion extends Pieza
 	/**
      * Construye una pieza de tipo impresion y asigna los valores a sus atributos. Constructor utilizado cuando se encuentre disponible para venta directa por un valor fijo y sea adquirida en consignacion
      */
-	public Impresion(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Impresion(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
 			double valorFijoVentaDirecta, boolean esConsignacion, Date fechaInicioConsignacion,
 			Date fechaFinConsignacion, Usuario propietarioConsignacion, String material, String tipoImpresion) {

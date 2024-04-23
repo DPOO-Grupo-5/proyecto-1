@@ -33,7 +33,7 @@ public class Escultura extends Pieza
 	/**
      * Construye una pieza de tipo escultura y asigna los valores a sus atributos. Constructor utilizado cuando no se encuentre disponible para venta directa por un valor fijo y no sea adquirida en consignacion
      */
-	public Escultura(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Escultura(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, double profundidad,
 			List<String> materiales, double peso, boolean electricidad, List<String> detallesInstalacion) {
 		super(codigo, titulo, yearCreacion, lugarCreacion, autor, estado, alto, ancho, Tipo.ESCULTURA);
@@ -47,7 +47,7 @@ public class Escultura extends Pieza
 	/**
      * Construye una pieza de tipo escultura y asigna los valores a sus atributos. Constructor utilizado cuando no sea adquirida en consignacion
      */
-	public Escultura(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Escultura(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
 			double valorFijoVentaDirecta, double profundidad, List<String> materiales, double peso,
 			boolean electricidad, List<String> detallesInstalacion) {
@@ -63,7 +63,7 @@ public class Escultura extends Pieza
 	/**
      * Construye una pieza de tipo escultura y asigna los valores a sus atributos. Constructor utilizado cuando se encuentre disponible para venta directa por un valor fijo y sea adquirida en consignacion
      */
-	public Escultura(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Escultura(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
 			double valorFijoVentaDirecta, boolean esConsignacion, Date fechaInicioConsignacion,
 			Date fechaFinConsignacion, Usuario propietarioConsignacion, double profundidad, List<String> materiales,
@@ -102,7 +102,7 @@ public class Escultura extends Pieza
 		this.peso = peso;
 	}
 
-	public boolean isElectricidad() {
+	public boolean getElectricidad() {
 		return electricidad;
 	}
 

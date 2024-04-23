@@ -1,6 +1,7 @@
 package galeria.modelo;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -384,8 +385,9 @@ public class Galeria {
      * @throws IOException Lanza esta excepción si hay problemas leyendo el archivo
      * @throws InformacionInconsistenteException Lanza esta excepción si durante la carga del archivo se encuentra información que no es consistente con la información de la
      *         aerolínea
+     * @throws ParseException 
      */
-    public void cargarPiezas( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, InformacionInconsistenteException
+    public void cargarPiezas( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, InformacionInconsistenteException, ParseException
     {
         IPersistenciaPiezas cargador = CentralPersistencia.getPersistenciaPiezas( tipoArchivo );
         cargador.cargarPiezas( archivo, this );
@@ -397,8 +399,9 @@ public class Galeria {
      * @param tipoArchivo El tipo del archivo. Puede ser CentralPersistencia.JSON o CentralPersistencia.PLAIN.
      * @throws TipoInvalidoException Se lanza esta excepción si se indica un tipo de archivo inválido
      * @throws IOException Lanza esta excepción si hay problemas escribiendo en el archivo
+     * @throws ParseException 
      */
-    public void salvarPiezas( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException
+    public void salvarPiezas( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, ParseException
     {
         IPersistenciaPiezas cargador = CentralPersistencia.getPersistenciaPiezas( tipoArchivo );
         cargador.salvarPiezas( archivo, this );

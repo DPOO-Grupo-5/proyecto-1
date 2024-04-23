@@ -21,8 +21,8 @@ public class Pintura extends Pieza
 	/**
      * Construye una pieza de tipo pintura y asigna los valores a sus atributos. Constructor utilizado cuando no se encuentre disponible para venta directa por un valor fijo y no sea adquirida en consignacion
      */
-	public Pintura(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
-			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
+	public Pintura(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
+			Estado estado, double alto, double ancho,
 			List<String> tecnicas, double peso) {
 		super(codigo, titulo, yearCreacion, lugarCreacion, autor, estado, alto, ancho, Tipo.PINTURA);
 		this.tecnicas = tecnicas;
@@ -31,7 +31,7 @@ public class Pintura extends Pieza
 	/**
      * Construye una pieza de tipo pintura y asigna los valores a sus atributos. Constructor utilizado cuando no sea adquirida en consignacion
      */
-	public Pintura(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Pintura(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
 			double valorFijoVentaDirecta, List<String> tecnicas, double peso) {
 		super(codigo, titulo, yearCreacion, lugarCreacion, autor, estado, alto, ancho, Tipo.PINTURA, disponibilidadVentaDirecta,
@@ -42,7 +42,7 @@ public class Pintura extends Pieza
 	/**
      * Construye una pieza de tipo pintura y asigna los valores a sus atributos. Constructor utilizado cuando se encuentre disponible para venta directa por un valor fijo y sea adquirida en consignacion
      */
-	public Pintura(String codigo, String titulo, Date yearCreacion, String lugarCreacion, List<String> autor,
+	public Pintura(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
 			double valorFijoVentaDirecta, boolean esConsignacion, Date fechaInicioConsignacion,
 			Date fechaFinConsignacion, Usuario propietarioConsignacion, List<String> tecnicas, double peso) {

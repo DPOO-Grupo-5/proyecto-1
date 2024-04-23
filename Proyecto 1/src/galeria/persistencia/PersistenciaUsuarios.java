@@ -57,12 +57,13 @@ public class PersistenciaUsuarios implements IPersistenciaUsuarios
 			}
 	        else if (partes[0].equals("empleado"))
 	        {
-	        	String rol = partes[ 1 ];
-            	String login = partes[ 2 ];
+	        	Rol rol = Rol.valueOf(partes[ 1 ].toUpperCase());
+	        	String login = partes[ 2 ];
 	            String password = partes[ 3 ];
 	            String nombre = partes[ 4 ];
 	            
 	            laGaleria.RegistrarEmpleado(new Empleado(rol, login, password, nombre));
+	            //laGaleria.RegistrarEmpleado(new Empleado(rol, login, password, nombre));
 	        }
 	            
             line = br.readLine( );
