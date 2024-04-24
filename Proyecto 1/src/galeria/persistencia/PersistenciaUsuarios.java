@@ -34,17 +34,15 @@ public class PersistenciaUsuarios implements IPersistenciaUsuarios
             String[] partes = line.split( ":" );
             if (partes[0].equals("cliente"))
 			{
-            	String rol = partes[ 1 ];
-            	String login = partes[ 2 ];
-	            String password = partes[ 3 ];
-	            String nombre = partes[ 4 ];
-	            String telefono = partes[ 5 ];
-	            String email = partes[ 6 ];
-	            boolean verificado = Boolean.parseBoolean(partes[ 7 ]);
-	            double capacidadAdquisitiva = Double.parseDouble(partes[ 8 ]);
-	            double valorMaximo = Double.parseDouble(partes[ 9 ]);
-	            
-	            String piezasString = partes[ 10 ];
+            	String login = partes[ 1 ];
+	            String password = partes[ 2 ];
+	            String nombre = partes[ 3 ];
+	            String telefono = partes[ 4 ];
+	            String email = partes[ 5 ];
+	            double capacidadAdquisitiva = Double.parseDouble(partes[ 6 ]);
+	            double valorMaximo = Double.parseDouble(partes[ 7 ]);
+	            boolean verificado = Boolean.parseBoolean(partes[ 8 ]);
+	            String piezasString = partes[ 9 ];
 	            LinkedList<String> piezas = new LinkedList<>();
 	
 	            String[] piezasSep = piezasString.split(",");
@@ -52,8 +50,7 @@ public class PersistenciaUsuarios implements IPersistenciaUsuarios
 	            for (String element : piezasSep) {
 	                piezas.add(element.trim());
 	            }
-	            laGaleria.RegistrarCliente(new Cliente(login, password, nombre, telefono, email, capacidadAdquisitiva, piezas));
-	            //usuarios.put( login, new Cliente(login, password, nombre, telefono, email, capacidadAdquisitiva, piezas));
+	            laGaleria.RegistrarCliente(new Cliente(login, password, nombre, telefono, email, capacidadAdquisitiva, valorMaximo, verificado, piezas));
 			}
 	        else if (partes[0].equals("empleado"))
 	        {
@@ -63,7 +60,6 @@ public class PersistenciaUsuarios implements IPersistenciaUsuarios
 	            String nombre = partes[ 4 ];
 	            
 	            laGaleria.RegistrarEmpleado(new Empleado(rol, login, password, nombre));
-	            //laGaleria.RegistrarEmpleado(new Empleado(rol, login, password, nombre));
 	        }
 	            
             line = br.readLine( );
@@ -81,11 +77,23 @@ public class PersistenciaUsuarios implements IPersistenciaUsuarios
         {
         	if (usuario instanceof Cliente) {
 				Cliente cliente = (Cliente) usuario;
-        		writer.println( "cliente:" + cliente.getLogin( ) + ":" + cliente.getPassword( ) + ":" + cliente.getNombre() + ":" + cliente.getTelefono( ) );
+				
+				String capacidadAdquisitiva = Double.toString(cliente.getCapacidadAdquisitiva());
+				String valorMaximo = Double.toString(cliente.getValorMaximo());
+				String verificado = Boolean.toString(cliente.isVerificado());
+				String piezasf = "";
+				for (String codigo : cliente.getPiezas()) {
+					piezasf += codigo + ",";
+				}
+				String piezas = piezasf.substring(0, piezasf.length() - 1);
+				 
+        		writer.println( "cliente:" + cliente.getLogin( ) + ":" + cliente.getPassword( ) + ":" + cliente.getNombre() + ":" + cliente.getTelefono() + ":" + cliente.getEmail() + ":" + capacidadAdquisitiva + ":" + valorMaximo + ":" + verificado + ":" + piezas);
         	}
-        	else
-        	{
-        		writer.println( "empleado:" + usuario.getLogin( ) + ":" + usuario.getPassword( ) + ":" + usuario.getNombre());
+        	else if (usuario instanceof Cliente){
+        		Empleado empleado = (Empleado) usuario;
+        		
+        		String rol = empleado.getRol().toString();
+        		writer.println( "empleado:" + rol + ":" + empleado.getLogin( ) + ":" + empleado.getPassword( ) + ":" + empleado.getNombre());
         	}
         }
 

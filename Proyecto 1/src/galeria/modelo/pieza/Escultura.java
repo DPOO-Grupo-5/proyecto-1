@@ -102,7 +102,7 @@ public class Escultura extends Pieza
 		this.peso = peso;
 	}
 
-	public boolean getElectricidad() {
+	public boolean isElectricidad() {
 		return electricidad;
 	}
 

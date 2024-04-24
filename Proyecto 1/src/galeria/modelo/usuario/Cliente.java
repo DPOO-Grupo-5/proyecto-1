@@ -1,6 +1,7 @@
 package galeria.modelo.usuario;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Esta clase modela a los clientes de la galeria, tanto los propietarios como los compradores
@@ -27,17 +28,24 @@ public class Cliente extends Usuario
 	 * Capacidad adquisitiva ingresada por el cliente
 	 */
 	private double capacidadAdquisitiva;
+	/**
+	 * Lista de códigos de piezas propias
+	 */
+	private List<String> piezas;
+	
 	
 	/**
      * Construye un nuevo cliente, ingresa los valores
      */
-	public Cliente(String login, String password, String nombre, String telefono, String email, double capacidadAdquisitiva, LinkedList<String> piezas) {
+	public Cliente(String login, String password, String nombre, String telefono, String email, double capacidadAdquisitiva, double valorMaximo, boolean verificado, LinkedList<String> piezas) {
 		super(Rol.CLIENTE, login, password, nombre);
-		this.valorMaximo = 0;
-		this.verificado = false;
+		
 		this.telefono = telefono;
 		this.email = email;
 		this.capacidadAdquisitiva = capacidadAdquisitiva;
+		this.valorMaximo = 0;
+		this.verificado = false;
+		this.setPiezas(piezas);
 	}
 	
 	public double getValorMaximo() {
@@ -69,6 +77,12 @@ public class Cliente extends Usuario
 	}
 	public void setCapacidadAdquisitiva(double capacidadAdquisitiva) {
 		this.capacidadAdquisitiva = capacidadAdquisitiva;
+	}
+	public List<String> getPiezas() {
+		return piezas;
+	}
+	public void setPiezas(List<String> piezas) {
+		this.piezas = piezas;
 	}
 	/**
 	 * En caso de que no se pueda realizar el pago debido a que no se cuenta con fondos en el valor maximo de las compras, podra demostrar que ha aumentado su capacidad adquisitiva

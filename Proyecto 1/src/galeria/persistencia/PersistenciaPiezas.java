@@ -151,21 +151,78 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
         // Guardar la información de los tipos de gasolina
         for( Pieza pieza : laGaleria.getInventario() )
         {
+        	String estado = pieza.getEstado().toString();
+			String autoresf = "";
+			for (String autorf : pieza.getAutor()) {
+				autoresf += autorf + ",";
+			}
+			String autor = autoresf.substring(0, autoresf.length() - 1);
+			String alto = Double.toString(pieza.getAlto());
+			String ancho = Double.toString(pieza.getAncho());
+			
         	if (pieza instanceof Pintura) {
 				Pintura pintura = (Pintura) pieza;
 				
-				String estado = pintura.getEstado().toString();
+				String tecnicasf = "";
+				for (String tecnicaf : pintura.getTecnicas()) {
+					tecnicasf += tecnicaf + ",";
+				}
+				String tecnicas = tecnicasf.substring(0, tecnicasf.length() - 1);
+				String peso = Double.toString(pintura.getPeso());
 				
         		writer.println( "pintura:" + pintura.getCodigo() + ":" + estado + ":" + pintura.getTitulo() 
-        			+ ":" + pintura.getYearCreacion() + ":" + pintura.getLugarCreacion() + ":" + pintura.getAutor() + ":" 
-        			+ pintura.getAlto() + ":" + pintura.getAncho() + ":" + pintura.getTecnicas() + ":" + pintura.getPeso());
-        	}
-        	else if (pieza instanceof Escultura){
+        			+ ":" + pintura.getYearCreacion() + ":" + pintura.getLugarCreacion() + ":" + autor + ":" 
+        			+ alto + ":" + ancho + ":" + tecnicas + ":" + peso);
+        	} else if (pieza instanceof Escultura){
         		Escultura escultura = (Escultura) pieza;
-        		writer.println( "escultura:" + escultura.getCodigo() + ":" + escultura.getEstado() + ":" + escultura.getTitulo() 
-        			+ ":" + escultura.getYearCreacion() + ":" + escultura.getLugarCreacion() + ":" + escultura.getAutor() + ":" 
-        			+ escultura.getAlto() + ":" + escultura.getAncho() + ":" + escultura.getProfundidad() + ":" + escultura.getMateriales() 
-        			+ ":" + escultura.getPeso() + ":" + escultura.getElectricidad() + ":" + escultura.getDetallesInstalacion());        	
+        		
+        		String profundidad = Double.toString(escultura.getProfundidad());
+        		String materialesf = "";
+				for (String materialf : escultura.getMateriales()) {
+					materialesf += materialf + ",";
+				}
+				String materiales = materialesf.substring(0, materialesf.length() - 1);
+        		String peso = Double.toString(escultura.getPeso());
+        		String electricidad = Boolean.toString(escultura.isElectricidad());
+        		String detalles = "";
+				for (String detalle : escultura.getDetallesInstalacion()) {
+					detalles += detalle + ",";
+				}
+				String detallesInstalacion = detalles.substring(0, detalles.length() - 1);
+        		
+        		writer.println( "escultura:" + escultura.getCodigo() + ":" + estado + ":" + escultura.getTitulo() 
+        			+ ":" + escultura.getYearCreacion() + ":" + escultura.getLugarCreacion() + ":" + autor + ":" + alto + ":" 
+        			+ ancho + ":" + profundidad + ":" + materiales + ":" + peso + ":" + electricidad + ":" + detallesInstalacion);   
+        		
+        	} else if (pieza instanceof Video){
+        		Video video = (Video) pieza;
+        		
+        		String duracion = Integer.toString(video.getDuracion());
+        		String size = Integer.toString(video.getTamano());
+        		
+        		writer.println( "video:" + video.getCodigo() + ":" + estado + ":" + video.getTitulo() 
+        			+ ":" + video.getYearCreacion() + ":" + video.getLugarCreacion() + ":" + autor + ":" + alto + ":" 
+        			+ ancho + ":" + duracion + ":" + video.getResolucion() + ":" + size + ":" + video.getFormato());        	
+        	} else if (pieza instanceof Fotografia){
+        		Fotografia fotografia = (Fotografia) pieza;
+        		
+        		String size = Integer.toString(fotografia.getTamano());
+        		
+        		writer.println( "fotografia:" + fotografia.getCodigo() + ":" + estado + ":" + fotografia.getTitulo() 
+        			+ ":" + fotografia.getYearCreacion() + ":" + fotografia.getLugarCreacion() + ":" + autor + ":" + alto + ":" 
+        			+ ancho + ":" + fotografia.getResolucion() + ":" + size + ":" + fotografia.getFormato());        	
+        	} else if (pieza instanceof Impresion){
+        		Impresion impresion = (Impresion) pieza;
+        		
+        		writer.println( "impresion:" + impresion.getCodigo() + ":" + estado + ":" + impresion.getTitulo() 
+        			+ ":" + impresion.getYearCreacion() + ":" + impresion.getLugarCreacion() + ":" + autor + ":" + alto + ":" 
+        			+ ancho + ":" + impresion.getMaterial() + ":" + impresion.getTipoImpresion());        	
+        	} else {
+        		Otro otro = (Otro) pieza;
+        		
+        		writer.println( "otro:" + otro.getCodigo() + ":" + estado + ":" + otro.getTitulo() 
+        			+ ":" + otro.getYearCreacion() + ":" + otro.getLugarCreacion() + ":" + autor + ":" + alto + ":" 
+        			+ ancho);  
         	}
         }
 
