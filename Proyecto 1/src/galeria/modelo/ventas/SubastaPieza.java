@@ -1,5 +1,5 @@
 package galeria.modelo.ventas;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import galeria.modelo.pieza.Estado;
@@ -37,16 +37,17 @@ public class SubastaPieza {
 	/**
 	 * Fecha en la que inicia la subasta
 	 */
-	private Date tiempoInicial;
+	private LocalDate tiempoInicial;
 	/**
 	 * Fecha en la que finaliza la subasta
 	 */
-	private Date tiempoFinal;
+	private LocalDate tiempoFinal;
 	
 	/**
 	 * A partir de sus atributos crea una pieza en subasta
 	 */
-	public SubastaPieza(double valorInicial, double valorMinimo, double valorOfertado, double valorActual, Pieza piezaSubastada, Date tiempoInicial, Date tiempoFinal) {
+	public SubastaPieza(double valorInicial, double valorMinimo, double valorOfertado, double valorActual, 
+			Pieza piezaSubastada, LocalDate tiempoInicial, LocalDate tiempoFinal) {
 		this.valorInicial = valorInicial;
 		this.valorMinimo = valorMinimo;
 		this.valorActual = valorInicial;
@@ -94,16 +95,16 @@ public class SubastaPieza {
 	public void setPago(Venta pago) {
 		this.pago = pago;
 	}
-	public Date getTiempoInicial() {
+	public LocalDate getTiempoInicial() {
 		return tiempoInicial;
 	}
-	public void setTiempoInicial(Date tiempoInicial) {
+	public void setTiempoInicial(LocalDate tiempoInicial) {
 		this.tiempoInicial = tiempoInicial;
 	}
-	public Date getTiempoFinal() {
+	public LocalDate getTiempoFinal() {
 		return tiempoFinal;
 	}
-	public void setTiempoFinal(Date tiempoFinal) {
+	public void setTiempoFinal(LocalDate tiempoFinal) {
 		this.tiempoFinal = tiempoFinal;
 	}
 	/**

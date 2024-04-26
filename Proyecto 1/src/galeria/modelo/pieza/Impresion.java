@@ -1,6 +1,6 @@
 package galeria.modelo.pieza;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import galeria.modelo.usuario.Usuario;
@@ -44,8 +44,8 @@ public class Impresion extends Pieza
      */
 	public Impresion(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
-			double valorFijoVentaDirecta, boolean esConsignacion, Date fechaInicioConsignacion,
-			Date fechaFinConsignacion, Usuario propietarioConsignacion, String material, String tipoImpresion) {
+			double valorFijoVentaDirecta, boolean esConsignacion, LocalDate fechaInicioConsignacion,
+			LocalDate fechaFinConsignacion, Usuario propietarioConsignacion, String material, String tipoImpresion) {
 		super(codigo, titulo, yearCreacion, lugarCreacion, autor, estado, alto, ancho, Tipo.IMPRESION, disponibilidadVentaDirecta,
 				valorFijoVentaDirecta, esConsignacion, fechaInicioConsignacion, fechaFinConsignacion,
 				propietarioConsignacion);

@@ -1,5 +1,5 @@
 package galeria.modelo.pieza;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import galeria.modelo.usuario.Usuario;
@@ -27,8 +27,8 @@ public class Otro extends Pieza
      */
 	public Otro(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
-			double valorFijoVentaDirecta, boolean esConsignacion, Date fechaInicioConsignacion,
-			Date fechaFinConsignacion, Usuario propietarioConsignacion) {
+			double valorFijoVentaDirecta, boolean esConsignacion, LocalDate fechaInicioConsignacion,
+			LocalDate fechaFinConsignacion, Usuario propietarioConsignacion) {
 		super(codigo, titulo, yearCreacion, lugarCreacion, autor, estado, alto, ancho, Tipo.OTRO, disponibilidadVentaDirecta,
 				valorFijoVentaDirecta, esConsignacion, fechaInicioConsignacion, fechaFinConsignacion,
 				propietarioConsignacion);

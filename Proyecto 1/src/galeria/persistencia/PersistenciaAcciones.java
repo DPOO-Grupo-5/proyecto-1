@@ -3,68 +3,69 @@ package galeria.persistencia;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import galeria.modelo.Galeria;
+import galeria.modelo.pieza.Pieza;
 import galeria.modelo.usuario.Cliente;
 import galeria.modelo.usuario.Usuario;
+import galeria.modelo.ventas.SubastaPieza;
+import galeria.modelo.ventas.Venta;
 
 
 public class PersistenciaAcciones implements IPersistenciaAcciones
 {
-	public static Usuario cargarUsuario(File archivo)
+	
+	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+	
+	public void cargarAcciones(String archivo, Galeria laGaleria) throws IOException, ParseException
 	{
-        List<Surtidor> acciones = new LinkedList<Surtidor>( );
-
-        BufferedReader br = new BufferedReader( new FileReader( archivo ) );
+		BufferedReader br = new BufferedReader( new FileReader( archivo ) );
         String line = br.readLine( );
         while( line != null )
         {
             String[] partes = line.split( ":" );
-            if( partes[ 0 ].equals( "cliente" ) )
-            {
-                String login = partes[ 1 ];
-                String password = partes[ 2 ];
-                String nombre = partes[ 3 ];
-                String rol = partes[ 4 ];
-                usuarios.put( login, new Cliente( rol, login, password, nombre ) );
-            }
-            else if( partes[ 0 ].equals( "surtidor" ) )
-            {
-                String nombreEmpleado = partes[ 1 ];
-                if( !empleados.containsKey( nombreEmpleado ) )
-                {
-                    empleados.put( nombreEmpleado, new Empleado( nombreEmpleado ) );
-                }
-                Empleado empleadoAsignado = empleados.get( nombreEmpleado );
-                Surtidor nuevoSurtidor = new Surtidor( tipos, empleadoAsignado );
-                for( int pos = 2; pos < partes.length; pos += 2 )
-                {
-                    String tipo = partes[ pos ];
-                    double cantidad = Double.parseDouble( partes[ pos + 1 ] );
-                    nuevoSurtidor.cambiarGalonesVendidos( tipo, cantidad );
-                }
-                surtidores.add( nuevoSurtidor );
-            }
-            else if( partes[ 0 ].equals( "empleado" ) )
-            {
-                String nombreEmpleado = partes[ 1 ];
-                int dinero = Integer.parseInt( partes[ 2 ] );
-                if( !empleados.containsKey( nombreEmpleado ) )
-                {
-                    empleados.put( nombreEmpleado, new Empleado( nombreEmpleado ) );
-                }
-                Empleado nuevoEmpleado = empleados.get( nombreEmpleado );
-                nuevoEmpleado.agregarDinero( dinero );
-            }
+            if (partes[0].equals("subasta"))
+			{
+	            double valorInicial = Double.parseDouble(partes[ 1 ]);
+	            double valorMinimo = Double.parseDouble(partes[ 2 ]);
+	            double valorOfertado = Double.parseDouble(partes[ 3 ]);
+	            double valorActual = Double.parseDouble(partes[ 4 ]);
+	            String piezaString = partes[ 5 ];
+	            Pieza piezaSubastada = laGaleria.ConsultarPieza(piezaString);
+	            String fechaInicialString = partes[ 6 ];
+	            Date fechaInicial = dateFormat.parse(fechaInicialString);
+	            String fechaFinalString = partes[ 7 ];
+	            Date fechaFinal = dateFormat.parse(fechaFinalString);
+	            
+	            laGaleria.RegistrarSubasta(new SubastaPieza(valorInicial, valorMinimo, valorOfertado, valorActual, piezaSubastada, fechaInicial, fechaFinal));
+			}
+	        else if (partes[0].equals("venta"))
+	        {
+	        	double valor = Double.parseDouble(partes[ 1 ]);
+	        	String compradorString = partes[ 5 ];
+	            Usuario usuario = laGaleria.ConsultarUsuario(compradorString);
+	            Cliente comprador = (Cliente) usuario;
+	            String piezaString = partes[ 5 ];
+	            Pieza piezaVenta = laGaleria.ConsultarPieza(piezaString);
 
+	            laGaleria.RegistrarVenta(new Venta(valor, comprador, piezaVenta));
+	        }
+	            
             line = br.readLine( );
         }
         br.close( );
-
-        Gasolinera nuevaGasolinera = new Gasolinera( surtidores, tipos.values( ), empleados.values( ) );
-        return nuevaGasolinera;
+	}
+	
+	public void salvarAcciones(String archivo, Galeria laGaleria) throws IOException {
+		
 	}
 }

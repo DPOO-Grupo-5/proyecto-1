@@ -2,7 +2,7 @@ package galeria.modelo;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -157,7 +157,7 @@ public class Galeria {
      *  @param fecha final que se valida
      *  @return revisa si la fecha inicial es antes que la fecha final
      */
-	public boolean VerificarFechas (Date fechaInicial, Date fechaFinal) {
+	public boolean VerificarFechas (LocalDate fechaInicial, LocalDate fechaFinal) {
 		if ((fechaInicial.compareTo(fechaFinal))<=0) {
 			return true;
 		}
@@ -258,10 +258,10 @@ public class Galeria {
      * Recorre la lista de piezas del inventario revisando las fechas de consignacion para verificar si se debe realizar una devolucion
     */
 	public void ActualizarEstadosPiezasConsignacion () { 
-		Date datenow = new Date();
+		LocalDate datenow = LocalDate.now();
 		for (Pieza obra : this.getInventario()) {
 			if(obra.isEsConsignacion()) {
-				if(obra.getFechaFinConsignacion().after(datenow)) {
+				if(obra.getFechaFinConsignacion().isAfter(datenow)) {
 					obra.Devolucion(obra);
 					obra.setEsConsignacion(false);
 					obra.setFechaFinConsignacion(null);
@@ -274,9 +274,9 @@ public class Galeria {
      * Recorre la lista de piezas del inventario revisando las fechas de la subasta, para verificar si la pieza debe volver a la bodega si la subasta culminó.
     */
 	public void ActualizarEstadosPiezasSubasta() { 
-		Date datenow = new Date();
+		LocalDate datenow = LocalDate.now();
 		for (SubastaPieza obra : this.getSubastas()) {
-			if(obra.getTiempoFinal().after(datenow)){
+			if(obra.getTiempoFinal().isAfter(datenow)){
 				if(this.FinalizarSubasta(obra)) {
 					subastas.remove(obra);
 				}
@@ -415,8 +415,9 @@ public class Galeria {
      * @throws IOException Lanza esta excepción si hay problemas leyendo el archivo
      * @throws InformacionInconsistenteException Lanza esta excepción si durante la carga del archivo se encuentra información que no es consistente con la información de la
      *         aerolínea
+     * @throws ParseException 
      */
-    public void cargarAcciones( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, InformacionInconsistenteException
+    public void cargarAcciones( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, InformacionInconsistenteException, ParseException
     {
         IPersistenciaAcciones cargador = CentralPersistencia.getPersistenciaAcciones( tipoArchivo );
         cargador.cargarAcciones( archivo, this );

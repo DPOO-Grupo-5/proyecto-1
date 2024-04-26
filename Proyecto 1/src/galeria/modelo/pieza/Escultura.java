@@ -1,5 +1,5 @@
 package galeria.modelo.pieza;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import galeria.modelo.usuario.Usuario;
@@ -65,8 +65,8 @@ public class Escultura extends Pieza
      */
 	public Escultura(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
-			double valorFijoVentaDirecta, boolean esConsignacion, Date fechaInicioConsignacion,
-			Date fechaFinConsignacion, Usuario propietarioConsignacion, double profundidad, List<String> materiales,
+			double valorFijoVentaDirecta, boolean esConsignacion, LocalDate fechaInicioConsignacion,
+			LocalDate fechaFinConsignacion, Usuario propietarioConsignacion, double profundidad, List<String> materiales,
 			double peso, boolean electricidad, List<String> detallesInstalacion) {
 		super(codigo, titulo, yearCreacion, lugarCreacion, autor, estado, alto, ancho, Tipo.ESCULTURA, disponibilidadVentaDirecta,
 				valorFijoVentaDirecta, esConsignacion, fechaInicioConsignacion, fechaFinConsignacion,

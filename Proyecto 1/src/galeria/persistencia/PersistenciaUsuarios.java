@@ -1,19 +1,12 @@
 package galeria.persistencia;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import galeria.modelo.Galeria;
-import galeria.modelo.pieza.Pieza;
 import galeria.modelo.usuario.Cliente;
 import galeria.modelo.usuario.Empleado;
 import galeria.modelo.usuario.Rol;
@@ -24,9 +17,7 @@ public class PersistenciaUsuarios implements IPersistenciaUsuarios
 {
 	@Override
 	public void cargarUsuarios(String archivo, Galeria laGaleria) throws IOException
-	{
-		Map<String, Cliente> usuarios = new HashMap<String, Cliente>( );
-        
+	{        
         BufferedReader br = new BufferedReader( new FileReader( archivo ) );
         String line = br.readLine( );
         while( line != null )

@@ -1,6 +1,6 @@
 package galeria.modelo.pieza;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import galeria.modelo.usuario.Usuario;
@@ -56,8 +56,8 @@ public class Video extends Pieza
      */
 	public Video(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, boolean disponibilidadVentaDirecta,
-			double valorFijoVentaDirecta, boolean esConsignacion, Date fechaInicioConsignacion,
-			Date fechaFinConsignacion, Usuario propietarioConsignacion, int duracion, String resolucion, int tamano,
+			double valorFijoVentaDirecta, boolean esConsignacion, LocalDate fechaInicioConsignacion,
+			LocalDate fechaFinConsignacion, Usuario propietarioConsignacion, int duracion, String resolucion, int tamano,
 			String formato) {
 		super(codigo, titulo, yearCreacion, lugarCreacion, autor, estado, alto, ancho, Tipo.VIDEO, disponibilidadVentaDirecta,
 				valorFijoVentaDirecta, esConsignacion, fechaInicioConsignacion, fechaFinConsignacion,

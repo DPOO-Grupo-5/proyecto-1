@@ -1,5 +1,5 @@
 package galeria.modelo.pieza;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import galeria.modelo.usuario.Usuario;
@@ -60,11 +60,11 @@ public abstract class Pieza {
 	/**
 	 * Indica si la fecha de inicio de la consignacion, si es el caso
 	 */
-	private Date fechaInicioConsignacion;
+	private LocalDate fechaInicioConsignacion;
 	/**
 	 * Indica si la fecha final de la consignacion, si es el caso
 	 */
-	private Date fechaFinConsignacion;
+	private LocalDate fechaFinConsignacion;
 	/**
 	 * Establece el porpietario de la pieza que se obtuvo en consignacion, si es el caso
 	 */
@@ -118,8 +118,8 @@ public abstract class Pieza {
      */
 	public Pieza(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
 			Estado estado, double alto, double ancho, Tipo tipo, boolean disponibilidadVentaDirecta,
-			double valorFijoVentaDirecta, boolean esConsignacion, Date fechaInicioConsignacion,
-			Date fechaFinConsignacion, Usuario propietario) {
+			double valorFijoVentaDirecta, boolean esConsignacion, LocalDate fechaInicioConsignacion,
+			LocalDate fechaFinConsignacion, Usuario propietario) {
 		this.codigo = codigo;
 		this.titulo = titulo;
 		this.yearCreacion = yearCreacion;
@@ -209,16 +209,16 @@ public abstract class Pieza {
 	public void setEsConsignacion(boolean esConsignacion) {
 		this.esConsignacion = esConsignacion;
 	}
-	public Date getFechaInicioConsignacion() {
+	public LocalDate getFechaInicioConsignacion() {
 		return fechaInicioConsignacion;
 	}
-	public void setFechaInicioConsignacion(Date fechaInicioConsignacion) {
+	public void setFechaInicioConsignacion(LocalDate fechaInicioConsignacion) {
 		this.fechaInicioConsignacion = fechaInicioConsignacion;
 	}
-	public Date getFechaFinConsignacion() {
+	public LocalDate getFechaFinConsignacion() {
 		return fechaFinConsignacion;
 	}
-	public void setFechaFinConsignacion(Date fechaFinConsignacion) {
+	public void setFechaFinConsignacion(LocalDate fechaFinConsignacion) {
 		this.fechaFinConsignacion = fechaFinConsignacion;
 	}
 	public Usuario getPropietario() {

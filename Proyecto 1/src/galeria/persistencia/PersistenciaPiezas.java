@@ -1,18 +1,13 @@
 package galeria.persistencia;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import galeria.modelo.Galeria;
 import galeria.modelo.pieza.Escultura;
@@ -22,24 +17,18 @@ import galeria.modelo.pieza.Impresion;
 import galeria.modelo.pieza.Otro;
 import galeria.modelo.pieza.Pieza;
 import galeria.modelo.pieza.Pintura;
-import galeria.modelo.pieza.Tipo;
 import galeria.modelo.pieza.Video;
-import galeria.modelo.usuario.Cliente;
-import galeria.modelo.usuario.Empleado;
-import galeria.modelo.usuario.Rol;
 import galeria.modelo.usuario.Usuario;
 
 
 public class PersistenciaPiezas implements IPersistenciaPiezas
-{
-	
-	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-	
+{	
 	@Override
 	public void cargarPiezas(String archivo, Galeria laGaleria) throws IOException, ParseException
 	{
-        Map<String, Pieza> piezas = new HashMap<String, Pieza>( );
-
+		
+		DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
         BufferedReader br = new BufferedReader( new FileReader( archivo ) );
         String line = br.readLine( );
         while( line != null )
@@ -61,9 +50,17 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
             }
             double alto = Double.parseDouble( partes[ 7 ] );
             double ancho = Double.parseDouble( partes[ 8 ] );
+            boolean disponibilidadVentaDirecta = Boolean.parseBoolean(partes[ 9 ]);
+            double valorFijoVentaDirecta = Double.parseDouble(partes[ 10 ]);
+            boolean esConsignacion = Boolean.parseBoolean(partes[ 11 ]);;
+            String fechaInicioConsignacionString = partes[ 12 ];
+            String fechaFinConsignacionString = partes[ 13 ];
+            String propietarioString = partes[ 14 ];
+            
+            
             if( partes[ 0 ].equals( "pintura" ) )
             {                
-                String tecnicasString = partes[ 9 ];
+                String tecnicasString = partes[ 15 ];
                 LinkedList<String> tecnicas = new LinkedList<>();
 
                 String[] tecnicasSep = tecnicasString.split(",");
@@ -71,17 +68,35 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
                 for (String element : tecnicasSep) {
                     tecnicas.add(element.trim());
                 }
+                 
+                double peso = Double.parseDouble( partes[ 16 ] );
                 
-                double peso = Double.parseDouble( partes[ 10 ] );
+                if (!disponibilidadVentaDirecta) {
+                	
+                	laGaleria.RegistrarPieza(new Pintura(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, tecnicas, peso));
+                	
+                } else if (!esConsignacion) {
+                	
+                	laGaleria.RegistrarPieza(new Pintura(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, tecnicas, peso));
+                } else {
+                	
+                	LocalDate fechaInicioConsignacion = LocalDate.parse(fechaInicioConsignacionString, formatoFecha);
+                	LocalDate fechaFinConsignacion = LocalDate.parse(fechaFinConsignacionString, formatoFecha);
+                    Usuario propietario = laGaleria.ConsultarUsuario(propietarioString);
+                	
+                	laGaleria.RegistrarPieza(new Pintura(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, 
+                			esConsignacion, fechaInicioConsignacion, fechaFinConsignacion, propietario, tecnicas, peso));
+                }
                 
-                laGaleria.RegistrarPieza(new Pintura(codigo, titulo, yearCreacion, lugarCreacion, autor,
-            			estado, alto, ancho, tecnicas, peso));
             }
             else if( partes[ 0 ].equals( "escultura" ) )
             {
-                double profundidad = Double.parseDouble( partes[ 9 ] );
+                double profundidad = Double.parseDouble( partes[ 15 ] );
                 
-                String materialesString = partes[ 10 ];
+                String materialesString = partes[ 16 ];
                 LinkedList<String> materiales = new LinkedList<>();
 
                 String[] materialesSep = materialesString.split(",");
@@ -90,10 +105,10 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
                     materiales.add(element.trim());
                 }
                 
-                double peso = Double.parseDouble( partes[ 11 ] );
-                boolean electricidad = Boolean.parseBoolean(partes[ 12 ]);
+                double peso = Double.parseDouble( partes[ 17 ] );
+                boolean electricidad = Boolean.parseBoolean(partes[ 18 ]);
                 
-                String detallesString = partes[ 13 ];
+                String detallesString = partes[ 19 ];
                 LinkedList<String> detalles = new LinkedList<>();
 
                 String[] detallesSep = detallesString.split(",");
@@ -101,41 +116,129 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
                 for (String element : detallesSep) {
                     detalles.add(element.trim());
                 }
-                
-                laGaleria.RegistrarPieza(new Escultura(codigo, titulo, yearCreacion, lugarCreacion, autor,
-            			estado, alto, ancho, profundidad, materiales, peso, electricidad, detalles));
+
+                if (!disponibilidadVentaDirecta) {
+                	
+                	laGaleria.RegistrarPieza(new Escultura(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, profundidad, materiales, peso, electricidad, detalles));
+                	
+                } else if (!esConsignacion) {
+                	                	
+                	laGaleria.RegistrarPieza(new Escultura(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, profundidad, 
+                			materiales, peso, electricidad, detalles));
+                } else {
+                	
+                	LocalDate fechaInicioConsignacion = LocalDate.parse(fechaInicioConsignacionString, formatoFecha);
+                	LocalDate fechaFinConsignacion = LocalDate.parse(fechaFinConsignacionString, formatoFecha);
+                    Usuario propietario = laGaleria.ConsultarUsuario(propietarioString);
+                	
+                	laGaleria.RegistrarPieza(new Escultura(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, 
+                			esConsignacion, fechaInicioConsignacion, fechaFinConsignacion, propietario, 
+                			profundidad, materiales, peso, electricidad, detalles));
+                }
             }
             else if( partes[ 0 ].equals( "video" ) )
             {
-                int duracion = Integer.parseInt( partes[ 9 ] );
-                String resolucion = partes[ 10 ];
-                int size = Integer.parseInt( partes[ 11 ] );
-                String formato = partes[ 12 ];
+                int duracion = Integer.parseInt( partes[ 15 ] );
+                String resolucion = partes[ 16 ];
+                int size = Integer.parseInt( partes[ 17 ] );
+                String formato = partes[ 18 ];
                 
-                laGaleria.RegistrarPieza(new Video(codigo, titulo, yearCreacion, lugarCreacion, autor,
-            			estado, alto, ancho, duracion, resolucion, size, formato));
+                if (!disponibilidadVentaDirecta) {
+                	
+                	laGaleria.RegistrarPieza(new Video(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, duracion, resolucion, size, formato));
+                	
+                } else if (!esConsignacion) {
+                	                	
+                	laGaleria.RegistrarPieza(new Video(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, duracion, resolucion, size, formato));
+                } else {
+                	
+                	LocalDate fechaInicioConsignacion = LocalDate.parse(fechaInicioConsignacionString, formatoFecha);
+                	LocalDate fechaFinConsignacion = LocalDate.parse(fechaFinConsignacionString, formatoFecha);
+                    Usuario propietario = laGaleria.ConsultarUsuario(propietarioString);
+                	
+                	laGaleria.RegistrarPieza(new Video(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, 
+                			esConsignacion, fechaInicioConsignacion, fechaFinConsignacion, propietario, duracion, resolucion, size, formato));
+                }
+                
             }
             else if( partes[ 0 ].equals( "fotografia" ) )
             {
-                String resolucion = partes[ 9 ];
-                int size = Integer.parseInt( partes[ 10 ] );
-                String formato = partes[ 11 ];
+                String resolucion = partes[ 15 ];
+                int size = Integer.parseInt( partes[ 16 ] );
+                String formato = partes[ 17 ];
                 
-                laGaleria.RegistrarPieza(new Fotografia(codigo, titulo, yearCreacion, lugarCreacion, autor,
-            			estado, alto, ancho, resolucion, size, formato));
+                if (!disponibilidadVentaDirecta) {
+                	
+                	laGaleria.RegistrarPieza(new Fotografia(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, resolucion, size, formato));
+                	
+                } else if (!esConsignacion) {
+                	                	
+                	laGaleria.RegistrarPieza(new Fotografia(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, resolucion, size, formato));
+                } else {
+                	
+                	LocalDate fechaInicioConsignacion = LocalDate.parse(fechaInicioConsignacionString, formatoFecha);
+                	LocalDate fechaFinConsignacion = LocalDate.parse(fechaFinConsignacionString, formatoFecha);
+                    Usuario propietario = laGaleria.ConsultarUsuario(propietarioString);
+                	
+                	laGaleria.RegistrarPieza(new Fotografia(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, 
+                			esConsignacion, fechaInicioConsignacion, fechaFinConsignacion, propietario, resolucion, size, formato));
+                }
             }
             else if( partes[ 0 ].equals( "impresion" ) )
             {
-                String material = partes[ 9 ];
-                String tipoImpresion = partes[ 10 ];
+                String material = partes[ 15 ];
+                String tipoImpresion = partes[ 16 ];
                 
-                laGaleria.RegistrarPieza(new Impresion(codigo, titulo, yearCreacion, lugarCreacion, autor,
-            			estado, alto, ancho, material, tipoImpresion));
+                if (!disponibilidadVentaDirecta) {
+                	
+                	laGaleria.RegistrarPieza(new Impresion(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, material, tipoImpresion));
+                	
+                } else if (!esConsignacion) {
+                	                	
+                	laGaleria.RegistrarPieza(new Impresion(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, material, tipoImpresion));
+                } else {
+                	
+                	LocalDate fechaInicioConsignacion = LocalDate.parse(fechaInicioConsignacionString, formatoFecha);
+                	LocalDate fechaFinConsignacion = LocalDate.parse(fechaFinConsignacionString, formatoFecha);
+                    Usuario propietario = laGaleria.ConsultarUsuario(propietarioString);
+                	
+                	laGaleria.RegistrarPieza(new Impresion(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, 
+                			esConsignacion, fechaInicioConsignacion, fechaFinConsignacion, propietario, material, tipoImpresion));
+                }
             }
             else
             {   
-                laGaleria.RegistrarPieza(new Otro(codigo, titulo, yearCreacion, lugarCreacion, autor,
-            			estado, alto, ancho));
+                if (!disponibilidadVentaDirecta) {
+                	
+                	laGaleria.RegistrarPieza(new Otro(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho));
+                	
+                } else if (!esConsignacion) {
+                	                	
+                	laGaleria.RegistrarPieza(new Otro(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta));
+                } else {
+                	
+                	LocalDate fechaInicioConsignacion = LocalDate.parse(fechaInicioConsignacionString, formatoFecha);
+                	LocalDate fechaFinConsignacion = LocalDate.parse(fechaFinConsignacionString, formatoFecha);
+                    Usuario propietario = laGaleria.ConsultarUsuario(propietarioString);
+                	
+                	laGaleria.RegistrarPieza(new Otro(codigo, titulo, yearCreacion, lugarCreacion, autor,
+                			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, 
+                			esConsignacion, fechaInicioConsignacion, fechaFinConsignacion, propietario));
+                }
             }
 
             line = br.readLine( );
@@ -146,6 +249,9 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
 	@Override
 	public void salvarPiezas(String archivo, Galeria laGaleria) throws IOException
 	{
+		
+		DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
 		PrintWriter writer = new PrintWriter( archivo );
 
         // Guardar la información de los tipos de gasolina
@@ -159,6 +265,24 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
 			String autor = autoresf.substring(0, autoresf.length() - 1);
 			String alto = Double.toString(pieza.getAlto());
 			String ancho = Double.toString(pieza.getAncho());
+			String disponibilidadVentaDirecta = Boolean.toString(pieza.isDisponibilidadVentaDirecta()); 
+            String valorFijoVentaDirecta = Double.toString(pieza.getValorFijoVentaDirecta());
+            String esConsignacion = Boolean.toString(pieza.isEsConsignacion()); 
+            LocalDate fechaInicioConsignacionDate = pieza.getFechaInicioConsignacion();
+            String fechaInicioConsignacion;
+            if (fechaInicioConsignacionDate != null) {
+            	fechaInicioConsignacion = fechaInicioConsignacionDate.format(formatoFecha);
+            } else {
+            	fechaInicioConsignacion = "null";
+            }
+            LocalDate fechaFinConsignacionDate = pieza.getFechaFinConsignacion();
+            String fechaFinConsignacion;
+            if (fechaFinConsignacionDate != null) {
+            	fechaFinConsignacion = fechaFinConsignacionDate.format(formatoFecha);
+            } else {
+            	fechaFinConsignacion = "null";
+            }
+            String propietario = pieza.getPropietario().getLogin();
 			
         	if (pieza instanceof Pintura) {
 				Pintura pintura = (Pintura) pieza;
@@ -171,8 +295,10 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
 				String peso = Double.toString(pintura.getPeso());
 				
         		writer.println( "pintura:" + pintura.getCodigo() + ":" + estado + ":" + pintura.getTitulo() 
-        			+ ":" + pintura.getYearCreacion() + ":" + pintura.getLugarCreacion() + ":" + autor + ":" 
-        			+ alto + ":" + ancho + ":" + tecnicas + ":" + peso);
+        			+ ":" + pintura.getYearCreacion() + ":" + pintura.getLugarCreacion() + ":" + autor + ":" + alto + ":" 
+        			+ ancho + ":" + disponibilidadVentaDirecta + ":" + valorFijoVentaDirecta + ":" + esConsignacion + ":" 
+        			+ fechaInicioConsignacion + ":" + fechaFinConsignacion + ":" + propietario + ":" + tecnicas + ":" + peso);
+        		
         	} else if (pieza instanceof Escultura){
         		Escultura escultura = (Escultura) pieza;
         		
@@ -192,7 +318,9 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
         		
         		writer.println( "escultura:" + escultura.getCodigo() + ":" + estado + ":" + escultura.getTitulo() 
         			+ ":" + escultura.getYearCreacion() + ":" + escultura.getLugarCreacion() + ":" + autor + ":" + alto + ":" 
-        			+ ancho + ":" + profundidad + ":" + materiales + ":" + peso + ":" + electricidad + ":" + detallesInstalacion);   
+        			+ ancho + ":" + disponibilidadVentaDirecta + ":" + valorFijoVentaDirecta + ":" + esConsignacion + ":" 
+        			+ fechaInicioConsignacion + ":" + fechaFinConsignacion + ":" + propietario + ":" + profundidad + ":" 
+        			+ materiales + ":" + peso + ":" + electricidad + ":" + detallesInstalacion);   
         		
         	} else if (pieza instanceof Video){
         		Video video = (Video) pieza;
@@ -202,7 +330,10 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
         		
         		writer.println( "video:" + video.getCodigo() + ":" + estado + ":" + video.getTitulo() 
         			+ ":" + video.getYearCreacion() + ":" + video.getLugarCreacion() + ":" + autor + ":" + alto + ":" 
-        			+ ancho + ":" + duracion + ":" + video.getResolucion() + ":" + size + ":" + video.getFormato());        	
+        			+ ancho + ":" + disponibilidadVentaDirecta + ":" + valorFijoVentaDirecta + ":" + esConsignacion + ":" 
+        			+ fechaInicioConsignacion + ":" + fechaFinConsignacion + ":" + propietario + ":" + duracion + ":" 
+        			+ video.getResolucion() + ":" + size + ":" + video.getFormato());     
+        		
         	} else if (pieza instanceof Fotografia){
         		Fotografia fotografia = (Fotografia) pieza;
         		
@@ -210,19 +341,26 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
         		
         		writer.println( "fotografia:" + fotografia.getCodigo() + ":" + estado + ":" + fotografia.getTitulo() 
         			+ ":" + fotografia.getYearCreacion() + ":" + fotografia.getLugarCreacion() + ":" + autor + ":" + alto + ":" 
-        			+ ancho + ":" + fotografia.getResolucion() + ":" + size + ":" + fotografia.getFormato());        	
+        			+ ancho + ":" + disponibilidadVentaDirecta + ":" + valorFijoVentaDirecta + ":" + esConsignacion + ":" 
+        			+ fechaInicioConsignacion + ":" + fechaFinConsignacion + ":" + propietario + ":" + fotografia.getResolucion() 
+        			+ ":" + size + ":" + fotografia.getFormato());        	
+        		
         	} else if (pieza instanceof Impresion){
         		Impresion impresion = (Impresion) pieza;
         		
         		writer.println( "impresion:" + impresion.getCodigo() + ":" + estado + ":" + impresion.getTitulo() 
         			+ ":" + impresion.getYearCreacion() + ":" + impresion.getLugarCreacion() + ":" + autor + ":" + alto + ":" 
-        			+ ancho + ":" + impresion.getMaterial() + ":" + impresion.getTipoImpresion());        	
+        			+ ancho + ":" + disponibilidadVentaDirecta + ":" + valorFijoVentaDirecta + ":" + esConsignacion + ":" 
+        			+ fechaInicioConsignacion + ":" + fechaFinConsignacion + ":" + propietario + ":" + impresion.getMaterial() 
+        			+ ":" + impresion.getTipoImpresion());
+        		
         	} else {
         		Otro otro = (Otro) pieza;
         		
         		writer.println( "otro:" + otro.getCodigo() + ":" + estado + ":" + otro.getTitulo() 
         			+ ":" + otro.getYearCreacion() + ":" + otro.getLugarCreacion() + ":" + autor + ":" + alto + ":" 
-        			+ ancho);  
+        			+ ancho + ":" + disponibilidadVentaDirecta + ":" + valorFijoVentaDirecta + ":" + esConsignacion + ":" 
+        			+ fechaInicioConsignacion + ":" + fechaFinConsignacion + ":" + propietario);  
         	}
         }
 
