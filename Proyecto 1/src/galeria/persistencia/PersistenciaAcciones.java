@@ -1,17 +1,11 @@
 package galeria.persistencia;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import galeria.modelo.Galeria;
 import galeria.modelo.pieza.Pieza;
@@ -24,7 +18,7 @@ import galeria.modelo.ventas.Venta;
 public class PersistenciaAcciones implements IPersistenciaAcciones
 {
 	
-	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+	DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
 	public void cargarAcciones(String archivo, Galeria laGaleria) throws IOException, ParseException
 	{
@@ -41,10 +35,8 @@ public class PersistenciaAcciones implements IPersistenciaAcciones
 	            double valorActual = Double.parseDouble(partes[ 4 ]);
 	            String piezaString = partes[ 5 ];
 	            Pieza piezaSubastada = laGaleria.ConsultarPieza(piezaString);
-	            String fechaInicialString = partes[ 6 ];
-	            Date fechaInicial = dateFormat.parse(fechaInicialString);
-	            String fechaFinalString = partes[ 7 ];
-	            Date fechaFinal = dateFormat.parse(fechaFinalString);
+	            LocalDate fechaInicial = LocalDate.parse(partes[ 6 ], formatoFecha);
+	            LocalDate fechaFinal = LocalDate.parse(partes[ 7 ], formatoFecha);
 	            
 	            laGaleria.RegistrarSubasta(new SubastaPieza(valorInicial, valorMinimo, valorOfertado, valorActual, piezaSubastada, fechaInicial, fechaFinal));
 			}

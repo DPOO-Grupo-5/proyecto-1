@@ -23,12 +23,11 @@ import galeria.modelo.usuario.Usuario;
 
 public class PersistenciaPiezas implements IPersistenciaPiezas
 {	
+	DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	
 	@Override
 	public void cargarPiezas(String archivo, Galeria laGaleria) throws IOException, ParseException
-	{
-		
-		DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		
+	{	
         BufferedReader br = new BufferedReader( new FileReader( archivo ) );
         String line = br.readLine( );
         while( line != null )
@@ -248,10 +247,7 @@ public class PersistenciaPiezas implements IPersistenciaPiezas
 	
 	@Override
 	public void salvarPiezas(String archivo, Galeria laGaleria) throws IOException
-	{
-		
-		DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		
+	{		
 		PrintWriter writer = new PrintWriter( archivo );
 
         // Guardar la información de los tipos de gasolina
