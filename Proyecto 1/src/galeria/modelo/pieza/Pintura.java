@@ -27,6 +27,8 @@ public class Pintura extends Pieza
 		this.tecnicas = tecnicas;
 		this.peso = peso;
 	}
+
+	//HOLAA
 	/**
      * Construye una pieza de tipo pintura y asigna los valores a sus atributos. Constructor utilizado cuando no sea adquirida en consignacion
      */
