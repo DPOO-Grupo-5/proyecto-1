@@ -5,6 +5,8 @@ import java.text.ParseException;
 
 import galeria.excepciones.InformacionInconsistenteException;
 import galeria.modelo.Galeria;
+import galeria.modelo.usuario.Rol;
+import galeria.modelo.usuario.Usuario;
 import galeria.persistencia.CentralPersistencia;
 import galeria.persistencia.TipoInvalidoException;
 
@@ -58,24 +60,31 @@ public class ConsolaPrincipal extends ConsolaBasica
             {
                 case 1:
                     // Iniciar sesión
-                    String usuario = pedirCadenaAlUsuario("Usuario");
+                    String login = pedirCadenaAlUsuario("Usuario");
                     String password = pedirCadenaAlUsuario("Contraseña");
+                    
+                    boolean inicioSesion = galeria.IniciarSesion(login, password);
 
-                    if (esAdministrador(usuario, password))
+                    if (inicioSesion)
                     {
-                        // Menú administrador
-                        ConsolaAdministrador consolaAdmin = new ConsolaAdministrador(galeria);
-                        consolaAdmin.correrAplicacion();
-                    }
-                    else if (esCliente(usuario, password))
+                    	Usuario usuario = galeria.ConsultarUsuario(login);
+	                    if (usuario.getRol() == Rol.ADMINISTRADOR)
+	                    {
+	                        // Menú administrador
+	                        ConsolaAdministrador consolaAdmin = new ConsolaAdministrador(galeria, login);
+	                        consolaAdmin.correrAplicacion();
+	                    }
+	                    else if (usuario.getRol() == Rol.CLIENTE)
+	                    {
+	                        // Menú cliente
+	                        ConsolaCliente consolaCliente = new ConsolaCliente(galeria, login);
+	                        consolaCliente.correrAplicacion();
+	                    }
+                    
+            		}
+	                else
                     {
-                        // Menú cliente
-                        ConsolaCliente consolaCliente = new ConsolaCliente(galeria, usuario);
-                        consolaCliente.correrAplicacion();
-                    }
-                    else
-                    {
-                        System.out.println("Credenciales incorrectas.");
+                        System.out.println("Usuario o contraseña incorrecta");
                     }
                     break;
                 case 2:
@@ -93,18 +102,6 @@ public class ConsolaPrincipal extends ConsolaBasica
                     System.out.println("Opción no válida.");
             }
         }
-    }
-    
-    private boolean esAdministrador(String usuario, String contraseña)
-    {
-        // Implementa la lógica para verificar si es un administrador
-        return "admin".equals(usuario) && "admin".equals(contraseña);
-    }
-
-    private boolean esCliente(String usuario, String contraseña)
-    {
-        // Implementa la lógica para verificar si es un cliente
-        return "cliente".equals(usuario) && "cliente".equals(contraseña);
     }
 
     public static void main( String[] args ) throws ParseException

@@ -5,10 +5,12 @@ import galeria.modelo.Galeria;
 public class ConsolaAdministrador extends ConsolaBasica
 {
     private Galeria galeria;
+    private String login;
 
-    public ConsolaAdministrador(Galeria galeria)
+    public ConsolaAdministrador(Galeria galeria, String login)
     {
         this.galeria = galeria;
+        this.login = login;
     }
 
     public void correrAplicacion()

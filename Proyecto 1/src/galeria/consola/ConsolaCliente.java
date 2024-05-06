@@ -16,7 +16,7 @@ public class ConsolaCliente extends ConsolaBasica
     public void correrAplicacion()
     {
         boolean continuar = true;
-        while (continuar)
+        while (continuar)	
         {
             int opcion = mostrarMenu("Menú Cliente", new String[] {
                 "Ver información personal",
