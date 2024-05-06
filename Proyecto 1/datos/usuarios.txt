@@ -1,2 +1,1 @@
 cliente:diego1:1234:Diego:1234:correo@correo:10000:1000:true:vangogh
-empleado:rol:login:password:nombre
