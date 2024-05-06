@@ -1,0 +1,2 @@
+subasta:valorInicial:valorMinimo:valorOfertado:valorActual:piezaSubastada:fechaInicial:fechaFinal
+venta:valor:comprador:piezaVenta

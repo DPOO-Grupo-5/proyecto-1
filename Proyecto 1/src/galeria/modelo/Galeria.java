@@ -322,6 +322,21 @@ public class Galeria {
 		subastas.add(piezasubastar);
 	}
 	/**
+     * Elimina un empleado de la lista de usuarios de la galeria
+     * @param empleado que se desea eliminar
+    */
+	public void EliminarEmpleado (Empleado empleado) {
+		usuarios.remove(empleado);
+	}
+	
+	/**
+     * Elimina un cliente de la lista de usuarios de la galeria
+     * @param cliente que se desea eliminar
+    */
+	public void EliminarCliente (Cliente cliente) {
+		usuarios.remove(cliente);
+	}
+	/**
      * Finaliza la subasta, enviando la oferta ganadora para efectuar la verificacion y el pago
      * @param pieza que se va a verificar
      * @return indica si fue posible crear la venta de la pieza

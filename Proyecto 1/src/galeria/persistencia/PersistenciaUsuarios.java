@@ -41,7 +41,8 @@ public class PersistenciaUsuarios implements IPersistenciaUsuarios
 	            for (String element : piezasSep) {
 	                piezas.add(element.trim());
 	            }
-	            laGaleria.RegistrarCliente(new Cliente(login, password, nombre, telefono, email, capacidadAdquisitiva, valorMaximo, verificado, piezas));
+	            laGaleria.RegistrarCliente(new Cliente(login, password, nombre, telefono, email, 
+	            		capacidadAdquisitiva, valorMaximo, verificado, piezas));
 			}
 	        else if (partes[0].equals("empleado"))
 	        {
@@ -78,13 +79,16 @@ public class PersistenciaUsuarios implements IPersistenciaUsuarios
 				}
 				String piezas = piezasf.substring(0, piezasf.length() - 1);
 				 
-        		writer.println( "cliente:" + cliente.getLogin( ) + ":" + cliente.getPassword( ) + ":" + cliente.getNombre() + ":" + cliente.getTelefono() + ":" + cliente.getEmail() + ":" + capacidadAdquisitiva + ":" + valorMaximo + ":" + verificado + ":" + piezas);
+        		writer.println( "cliente:" + cliente.getLogin( ) + ":" + cliente.getPassword( ) + ":" 
+        				+ cliente.getNombre() + ":" + cliente.getTelefono() + ":" + cliente.getEmail() + ":" 
+        				+ capacidadAdquisitiva + ":" + valorMaximo + ":" + verificado + ":" + piezas);
         	}
         	else if (usuario instanceof Cliente){
         		Empleado empleado = (Empleado) usuario;
         		
         		String rol = empleado.getRol().toString();
-        		writer.println( "empleado:" + rol + ":" + empleado.getLogin( ) + ":" + empleado.getPassword( ) + ":" + empleado.getNombre());
+        		writer.println( "empleado:" + rol + ":" + empleado.getLogin( ) + ":" + empleado.getPassword( ) + ":" 
+        				+ empleado.getNombre());
         	}
         }
 
