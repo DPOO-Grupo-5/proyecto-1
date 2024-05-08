@@ -1,21 +1,34 @@
 package galeria.consola;
 
 import galeria.modelo.Galeria;
+import galeria.modelo.usuario.Cliente;
 
 public class ConsolaCliente extends ConsolaBasica
 {
-    private Galeria galeria;
-    private String cliente;
+    private Galeria laGaleria;
+    private String login;
 
-    public ConsolaCliente(Galeria galeria, String cliente)
+    public ConsolaCliente(Galeria galeria, String login)
     {
-        this.galeria = galeria;
-        this.cliente = cliente;
+        this.laGaleria = galeria;
+        this.login = login;
+    }
+    
+    public void registrarCliente()
+    {
+    	String password = pedirCadenaAlUsuario("Nueva contraseña: ");	
+    	String nombre = pedirCadenaAlUsuario("Nombre: ");
+    	String telefono = pedirCadenaAlUsuario("Número de telefono: ");
+    	String email = pedirCadenaAlUsuario("Email: ");
+    	double capacidadAdquisitiva = pedirNumeroAlUsuario("Capacidad adquisitiva: ");
+    	Cliente cliente = new Cliente(login, password, nombre, telefono, email, capacidadAdquisitiva, 0, false, null);
+    	laGaleria.RegistrarCliente(cliente);
     }
 
     public void correrAplicacion()
     {
-        boolean continuar = true;
+    	Cliente cliente = (Cliente) laGaleria.ConsultarUsuario(login);
+    	boolean continuar = true;
         while (continuar)	
         {
             int opcion = mostrarMenu("Menú Cliente", new String[] {
@@ -23,6 +36,7 @@ public class ConsolaCliente extends ConsolaBasica
                 "Consignar pieza",
                 "Ver piezas consignadas",
                 "Actualizar pieza",
+                "Ver catálogo de piezas",
                 "Cerrar sesión",
                 "Eliminar cuenta"
             });
@@ -30,7 +44,7 @@ public class ConsolaCliente extends ConsolaBasica
             switch (opcion)
             {
                 case 1:
-                    verInformacionPersonal();
+                    verInformacionPersonal(cliente);
                     break;
                 case 2:
                     consignarPieza();
@@ -42,11 +56,14 @@ public class ConsolaCliente extends ConsolaBasica
                     actualizarPieza();
                     break;
                 case 5:
+                	verCatalogoPiezas();
+                	break;
+                case 6:
                     // Cerrar sesión
                     continuar = false;
                     break;
-                case 6:
-                    eliminarCuenta();
+                case 7:
+                    eliminarCuenta(cliente);
                     continuar = false;
                     break;
                 default:
@@ -55,24 +72,36 @@ public class ConsolaCliente extends ConsolaBasica
         }
     }
 
-    private void verInformacionPersonal()
+    private void verInformacionPersonal(Cliente cliente)
     {
         boolean continuar = true;
         while (continuar)
         {
-            int opcion = mostrarMenu("Información Personal", new String[] {
+        	String nombre = cliente.getNombre();
+        	System.out.println("Nombre: " + nombre);
+        	String telefono = cliente.getTelefono();
+        	System.out.println("Telefono: " + telefono);
+        	String email = cliente.getEmail();
+        	System.out.println("Email: " + email);
+        	double capacidadAdquisitiva = cliente.getCapacidadAdquisitiva();
+        	System.out.println("Capacidad Adquisitiva: " + Double.toString(capacidadAdquisitiva));
+        	
+            int opcion = mostrarMenu("Actualizar Información Personal", new String[] {
                 "Registrar nuevo teléfono",
                 "Registrar nuevo correo",
+                "Cambiar capacidad adquisitiva",
                 "Volver"
             });
 
             switch (opcion)
             {
                 case 1:
-                    registrarNuevoTelefono();
+                    registrarNuevoTelefono(cliente);
+                    System.out.println("Registro de número de teléfono exitoso");
                     break;
                 case 2:
-                    registrarNuevoCorreo();
+                    registrarNuevoCorreo(cliente);
+                    System.out.println("Registro de email exitoso");
                     break;
                 case 3:
                     continuar = false;
@@ -83,14 +112,17 @@ public class ConsolaCliente extends ConsolaBasica
         }
     }
 
-    private void registrarNuevoTelefono()
+    private void registrarNuevoTelefono(Cliente cliente)
     {
-        // Implementa la lógica para registrar un nuevo teléfono
+    	String telefono = pedirCadenaAlUsuario("Nuevo número de telefono: ");
+    	cliente.setTelefono(telefono);
+    	
     }
 
-    private void registrarNuevoCorreo()
+    private void registrarNuevoCorreo(Cliente cliente)
     {
-        // Implementa la lógica para registrar un nuevo correo
+    	String email = pedirCadenaAlUsuario("Nuevo email: ");
+    	cliente.setEmail(email);
     }
 
     private void consignarPieza()
@@ -107,9 +139,14 @@ public class ConsolaCliente extends ConsolaBasica
     {
         // Implementa la lógica para actualizar una pieza
     }
-
-    private void eliminarCuenta()
+    
+    private void verCatalogoPiezas()
     {
-        // Implementa la lógica para eliminar la cuenta
+    	
+    }
+
+    private void eliminarCuenta(Cliente cliente)
+    {
+        laGaleria.EliminarCliente(cliente);
     }
 }

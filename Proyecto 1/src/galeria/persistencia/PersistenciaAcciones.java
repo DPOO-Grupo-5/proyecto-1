@@ -51,7 +51,17 @@ public class PersistenciaAcciones implements IPersistenciaAcciones
 
 	            laGaleria.RegistrarVenta(new Venta(valor, comprador, piezaVenta));
 	        }
-	            
+	        else if (partes[0].equals("oferta"))
+	        {
+	        	double valor = Double.parseDouble(partes[ 1 ]);
+	        	String compradorString = partes[ 5 ];
+	            Usuario usuario = laGaleria.ConsultarUsuario(compradorString);
+	            Cliente comprador = (Cliente) usuario;
+	            String piezaString = partes[ 5 ];
+	            Pieza piezaVenta = laGaleria.ConsultarPieza(piezaString);
+
+	            //laGaleria.RegistrarOferta(new Venta(valor, comprador, piezaVenta));
+	        }	            
             line = br.readLine( );
         }
         br.close( );

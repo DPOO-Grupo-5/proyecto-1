@@ -12,7 +12,7 @@ import galeria.persistencia.TipoInvalidoException;
 
 public class ConsolaPrincipal extends ConsolaBasica
 {
-    private Galeria galeria;
+    private Galeria laGaleria;
 
     /**
      * Es un método que corre la aplicación y realmente no hace nada interesante: sólo muestra cómo se podría utilizar la clase Aerolínea para hacer pruebas.
@@ -23,16 +23,16 @@ public class ConsolaPrincipal extends ConsolaBasica
     {
     	try
         {
-            galeria = new Galeria( );
+    		laGaleria = new Galeria( );
             // String archivo = this.pedirCadenaAlUsuario( "Digite el nombre del archivo json con la información de una aerolinea" );            
             String archivoPiezas = "piezas.txt"; 
-            galeria.cargarPiezas( "./datos/" + archivoPiezas, CentralPersistencia.PLAIN );
+            laGaleria.cargarPiezas( "./datos/" + archivoPiezas, CentralPersistencia.PLAIN );
             
             String archivoUsuarios = "usuarios.txt"; 
-            galeria.cargarUsuarios( "./datos/" + archivoUsuarios, CentralPersistencia.PLAIN );
+            laGaleria.cargarUsuarios( "./datos/" + archivoUsuarios, CentralPersistencia.PLAIN );
             
             String archivoAcciones = "acciones.txt"; 
-            galeria.cargarAcciones( "./datos/" + archivoAcciones, CentralPersistencia.PLAIN );
+            laGaleria.cargarAcciones( "./datos/" + archivoAcciones, CentralPersistencia.PLAIN );
         }
         catch( TipoInvalidoException e )
         {
@@ -47,6 +47,13 @@ public class ConsolaPrincipal extends ConsolaBasica
             e.printStackTrace();
         }
     	
+    	correrMenuInicial();
+    
+    }
+    
+    public void correrMenuInicial()
+    {
+    	
     	boolean continuar = true;
         while (continuar)
         {
@@ -60,24 +67,24 @@ public class ConsolaPrincipal extends ConsolaBasica
             {
                 case 1:
                     // Iniciar sesión
-                    String login = pedirCadenaAlUsuario("Usuario");
-                    String password = pedirCadenaAlUsuario("Contraseña");
+                    String login = pedirCadenaAlUsuario("Usuario: ");
+                    String password = pedirCadenaAlUsuario("Contraseña: ");
                     
-                    boolean inicioSesion = galeria.IniciarSesion(login, password);
+                    boolean inicioSesion = laGaleria.IniciarSesion(login, password);
 
                     if (inicioSesion)
                     {
-                    	Usuario usuario = galeria.ConsultarUsuario(login);
+                    	Usuario usuario = laGaleria.ConsultarUsuario(login);
 	                    if (usuario.getRol() == Rol.ADMINISTRADOR)
 	                    {
 	                        // Menú administrador
-	                        ConsolaAdministrador consolaAdmin = new ConsolaAdministrador(galeria, login);
+	                        ConsolaAdministrador consolaAdmin = new ConsolaAdministrador(laGaleria, login);
 	                        consolaAdmin.correrAplicacion();
 	                    }
 	                    else if (usuario.getRol() == Rol.CLIENTE)
 	                    {
 	                        // Menú cliente
-	                        ConsolaCliente consolaCliente = new ConsolaCliente(galeria, login);
+	                        ConsolaCliente consolaCliente = new ConsolaCliente(laGaleria, login);
 	                        consolaCliente.correrAplicacion();
 	                    }
                     
@@ -89,10 +96,16 @@ public class ConsolaPrincipal extends ConsolaBasica
                     break;
                 case 2:
                     // Registrarse
-                    String nuevoUsuario = pedirCadenaAlUsuario("Nuevo usuario");
-                    String nuevaContraseña = pedirCadenaAlUsuario("Nueva contraseña");
-                    //registrarNuevoUsuario(nuevoUsuario, nuevaContraseña);
-                    System.out.println("Registro exitoso.");
+                    String nuevoUsuario = pedirCadenaAlUsuario("Nuevo login");
+                    if (laGaleria.ComprobarUsuario(nuevoUsuario)) {
+                    	System.out.println("Usuario ya existente");
+                    } else {
+                    	ConsolaCliente consolaCliente = new ConsolaCliente(laGaleria, nuevoUsuario);
+                        consolaCliente.registrarCliente();
+                        System.out.println("Registro exitoso");
+                    }
+                    
+                    correrMenuInicial();
                     break;
                 case 3:
                     // Salir

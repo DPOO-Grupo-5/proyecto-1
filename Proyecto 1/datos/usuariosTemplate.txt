@@ -1,0 +1,2 @@
+cliente:login:password:nombre:telefono:email:capacidadAdquisitiva:valorMaximo:verificado:piezas
+empleado:rol:login:password:nombre
