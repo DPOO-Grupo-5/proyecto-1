@@ -27,52 +27,7 @@ public class CentralPersistencia
      * @return El objeto que debería usarse para cargar y salvar la información
      * @throws TipoInvalidoException Se lanza esta excepción si se utiliza un tipo de archivo que no es válido
      */
-/*
-	private IPersistenciaUsuarios persistenciaUsuarios;
-    private IPersistenciaPiezas persistenciaPiezas;
-    private IPersistenciaAcciones persistenciaAcciones;
 
-    public CentralPersistencia(IPersistenciaUsuarios persistenciaUsuarios, IPersistenciaPiezas persistenciaPiezas, IPersistenciaAcciones persistenciaAcciones)
-    {
-        this.persistenciaUsuarios = persistenciaUsuarios;
-        this.persistenciaPiezas = persistenciaPiezas;
-        this.persistenciaAcciones = persistenciaAcciones;
-    }
-
-    public void cargarGaleria(String directorio) {
-        for (File archivo : new File(directorio).listFiles()) {
-            String nombreArchivo = archivo.getName();
-            String tipoArchivo = nombreArchivo.substring(nombreArchivo.lastIndexOf(".") + 1);
-
-           try {
-               switch (tipoArchivo) {
-                    case "usuarios":
-                        persistenciaUsuarios.cargarUsuarios(archivo, galeria);
-                        break;
-                    case "piezas":
-                        persistenciaPiezas.cargarPiezas(archivo, galeria);
-                        break;
-                    case "acciones":
-                        persistenciaAcciones.cargarAcciones(archivo, galeria);
-                        break;
-                    default:
-                        System.err.println("Tipo de archivo no reconocido: " + tipoArchivo);
-                }
-            } catch (IOException e) {
-                System.err.println("Error al cargar archivo: " + e.getMessage());
-            }
-        }
-    }
-
-    public void salvarGaleria(String directorio) 
-    {
-        Galeria galeria = new Galeria();
-
-        persistenciaUsuarios.cargarUsuarios(new File(directorio, "usuarios"), galeria);
-        persistenciaPiezas.cargarPiezas(new File(directorio, "piezas"), galeria);
-        persistenciaAcciones.cargarAcciones(new File(directorio, "acciones");
-    }
-*/ 
 	/**
      * La cadena utilizada para identificar a los archivos en formato JSON
      */

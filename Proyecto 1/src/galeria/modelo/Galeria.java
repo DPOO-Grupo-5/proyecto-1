@@ -191,6 +191,20 @@ public class Galeria {
 		return null;
 	}
 	/**
+     * Recibe el login de un usuario y retorna toda su informacion
+     * @param login del usuario que se quiere consultar
+     * @retrun usuario correspondiente al login ingresado
+     */
+	public Cliente ConsultarCliente (String login) {     
+		for (Usuario user : this.getUsuarios()) {
+			if (user.getLogin().equals(login)) {
+				return (Cliente) user;
+			}
+		}
+		//excepcion
+		return null;
+	}
+	/**
      * Recibe el codigo de una pieza y retorna toda su informacion
      * @param codigo de la pieza que se quiere consultar
      * @retrun pieza correspondiente al codigo ingresado
@@ -214,6 +228,92 @@ public class Galeria {
 		for (Pieza obra : this.getInventario()) {
 			if (obra.getEstado().equals(estado)) {
 				catalogo.add(obra);
+			}
+		}
+		if(catalogo.isEmpty()) 
+			return catalogo;
+		else 
+			//exepcion
+			return catalogo;
+	}
+	/** 
+     * Consulta las piezas que se encuentran disponibles para la venta directa
+     * @rertun lista con todas las piezas que se encuentren disponibles para la evnta directa
+     */
+	public List<Pieza> ConsultarPiezasEnVenta () {
+		LinkedList<Pieza> catalogo = new LinkedList<Pieza>();
+		for (Pieza obra : this.getInventario()) {
+			if (obra.isDisponibilidadVentaDirecta()) {
+				catalogo.add(obra);
+			}
+		}
+		if(catalogo.isEmpty()) 
+			return catalogo;
+		else 
+			//exepcion
+			return catalogo;
+	}
+	/** 
+     * Consulta ventas que se han realizado para una pieza en especifico
+     * @param pieza de la cual se desea conocer su historial de ventas
+     * @rertun lista con la informacion de todas las ventas que se han efectuado de dicha pieza
+     */
+	public List<Venta> ConsultarVentasPieza(Pieza pieza) {
+		LinkedList<Venta> catalogo = new LinkedList<Venta>();
+		for (Venta venta: this.getVentas()) {
+			if (venta.getPiezaVenta().equals(pieza)) {
+				catalogo.add(venta);
+			}
+		}
+		if(catalogo.isEmpty()) 
+			return catalogo;
+		else 
+			//exepcion
+			return catalogo;
+	}
+	/** 
+     * Consulta ventas que ha realizado un comprador de una pieza en especifico
+     * @param pieza de la cual se desea conocer su historial de ventas
+     * @param login del usuario del cual se desean conocer sus compras
+     * @rertun lista con la informacion de todas las ventas que ha efectuado el comprador de dicha pieza
+     */
+	public List<Venta> ConsultarComprasUsuario(Pieza pieza, String login) {
+		LinkedList<Venta> catalogo = new LinkedList<Venta>();
+		for (Venta venta: this.getVentas()) {
+			if (venta.getPiezaVenta().equals(pieza) && venta.getComprador().getLogin().equals(login)) {
+				catalogo.add(venta);
+			}
+		}
+		if(catalogo.isEmpty()) 
+			return catalogo;
+		else 
+			//exepcion
+			return catalogo;
+	}
+	/** 
+     * Calcula el valor de la coleccion de las piezas de un usuario
+     * @param login del usuario del cual se desea calcular el valor de su coleccion
+     * @rertun valor de su coleccion
+     */
+	public double CalcularValorColeccion(String login) {
+		double valorColeccion = 0;
+		for (Pieza pieza: this.getInventario()) {
+			if (pieza.getPropietario().getLogin().equals(login)) {
+				valorColeccion=valorColeccion+this.ConsultarComprasUsuario(pieza, login).getLast().getValor();
+			}
+		}
+		return valorColeccion;
+	}
+	/** 
+     * Consulta las piezas que pertenecen a un artista
+     * @param artista del cual se desean conocer sus piezas
+     * @rertun lista con la informacion de todas las piezas del artista
+     */
+	public List<Pieza> ConsultarPiezasArtista(String artista) {
+		LinkedList<Pieza> catalogo = new LinkedList<Pieza>();
+		for (Pieza pieza: this.getInventario()) {
+			if (pieza.getAutor().contains(artista)) {
+				catalogo.add(pieza);
 			}
 		}
 		if(catalogo.isEmpty()) 
@@ -271,6 +371,22 @@ public class Galeria {
 		}
 	}
 	/**
+     * Recorre la lista de piezas del inventario revisando las fechas de consignacion para verificar si se debe realizar una devolucion
+    */
+	public List<Pieza> piezasEnConsignacion () { 
+		LocalDate datenow = LocalDate.now();
+		LinkedList<Pieza> piezas = new LinkedList<Pieza>( );
+		for (Pieza obra : this.getInventario()) {
+			if(obra.isEsConsignacion()) {
+				if(obra.getFechaFinConsignacion().isAfter(datenow)) {
+					piezas.addLast(obra);
+				}
+			}
+		}
+		return piezas;
+		
+	}
+	/**
      * Recorre la lista de piezas del inventario revisando las fechas de la subasta, para verificar si la pieza debe volver a la bodega si la subasta culminó.
     */
 	public void ActualizarEstadosPiezasSubasta() { 
@@ -325,7 +441,7 @@ public class Galeria {
      * Elimina un empleado de la lista de usuarios de la galeria
      * @param empleado que se desea eliminar
     */
-	public void EliminarEmpleado (Empleado empleado) {
+	public void EliminarEmpleado (Usuario empleado) {
 		usuarios.remove(empleado);
 	}
 	

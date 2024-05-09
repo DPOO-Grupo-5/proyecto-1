@@ -51,6 +51,7 @@ public class Venta {
 		this.piezaVenta = piezaVenta;
 		this.fecha = null;
 		this.getPiezaVenta().setEstado(Estado.BLOQUEADO);
+		this.getPiezaVenta().setDisponibilidadVentaDirecta(false);
 	}
 	/**
 	 * Crea una venta relacionando el cliente y la pieza, en el caso de una venta directa. Ademas cambia el estado de la pieza a bloqueado hasta que se efectue el pago
@@ -64,6 +65,7 @@ public class Venta {
 		this.piezaVenta = piezaVenta;
 		this.fecha = null;
 		this.getPiezaVenta().setEstado(Estado.BLOQUEADO);
+		this.getPiezaVenta().setDisponibilidadVentaDirecta(false);
 	}
 	
 	public double getValor() {
@@ -130,9 +132,8 @@ public class Venta {
 	 * @param medio de pago con el que se realiza la venta
 	 * @return indica si la venta fue exitosa
 	 */
-	public boolean efectuarVenta(Venta venta, MedioPago medioPago) {
+	public boolean efectuarVenta(Venta venta) {
 		if(venta.descontarPago(venta)) {
-			venta.setMedioPago(medioPago);
 			venta.setAceptada(true);
 			venta.getPiezaVenta().setEstado(Estado.VENDIDO);
 			Date datenow = new Date();

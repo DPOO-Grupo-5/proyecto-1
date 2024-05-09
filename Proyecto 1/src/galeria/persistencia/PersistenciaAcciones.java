@@ -3,14 +3,19 @@ package galeria.persistencia;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 import galeria.modelo.Galeria;
 import galeria.modelo.pieza.Pieza;
 import galeria.modelo.usuario.Cliente;
+import galeria.modelo.usuario.Empleado;
 import galeria.modelo.usuario.Usuario;
+import galeria.modelo.ventas.Oferta;
 import galeria.modelo.ventas.SubastaPieza;
 import galeria.modelo.ventas.Venta;
 
@@ -22,6 +27,7 @@ public class PersistenciaAcciones implements IPersistenciaAcciones
 	
 	public void cargarAcciones(String archivo, Galeria laGaleria) throws IOException, ParseException
 	{
+		Map<Integer, SubastaPieza> subastas = new HashMap<>();
 		BufferedReader br = new BufferedReader( new FileReader( archivo ) );
         String line = br.readLine( );
         while( line != null )
@@ -29,38 +35,37 @@ public class PersistenciaAcciones implements IPersistenciaAcciones
             String[] partes = line.split( ":" );
             if (partes[0].equals("subasta"))
 			{
-	            double valorInicial = Double.parseDouble(partes[ 1 ]);
-	            double valorMinimo = Double.parseDouble(partes[ 2 ]);
-	            double valorOfertado = Double.parseDouble(partes[ 3 ]);
-	            double valorActual = Double.parseDouble(partes[ 4 ]);
-	            String piezaString = partes[ 5 ];
-	            Pieza piezaSubastada = laGaleria.ConsultarPieza(piezaString);
-	            LocalDate fechaInicial = LocalDate.parse(partes[ 6 ], formatoFecha);
-	            LocalDate fechaFinal = LocalDate.parse(partes[ 7 ], formatoFecha);
+            	int contador = Integer.parseInt(partes[ 1 ]);
+            	double valorInicial = Double.parseDouble(partes[ 2 ]);
+	            double valorMinimo = Double.parseDouble(partes[ 3 ]);
+	            Pieza piezaSubastada = laGaleria.ConsultarPieza(partes[ 4 ]);
+	            LocalDate tiempoFinal = LocalDate.parse(partes[ 5 ], formatoFecha);
 	            
-	            laGaleria.RegistrarSubasta(new SubastaPieza(valorInicial, valorMinimo, valorOfertado, valorActual, piezaSubastada, fechaInicial, fechaFinal));
+	            SubastaPieza subasta = new SubastaPieza(valorInicial, valorMinimo, piezaSubastada, tiempoFinal);
+	            laGaleria.RegistrarSubasta(subasta);
+	            subastas.put(contador, subasta);
 			}
 	        else if (partes[0].equals("venta"))
 	        {
 	        	double valor = Double.parseDouble(partes[ 1 ]);
-	        	String compradorString = partes[ 5 ];
+	        	String compradorString = partes[ 2 ];
 	            Usuario usuario = laGaleria.ConsultarUsuario(compradorString);
 	            Cliente comprador = (Cliente) usuario;
-	            String piezaString = partes[ 5 ];
+	            String piezaString = partes[ 3 ];
 	            Pieza piezaVenta = laGaleria.ConsultarPieza(piezaString);
 
 	            laGaleria.RegistrarVenta(new Venta(valor, comprador, piezaVenta));
 	        }
 	        else if (partes[0].equals("oferta"))
 	        {
-	        	double valor = Double.parseDouble(partes[ 1 ]);
-	        	String compradorString = partes[ 5 ];
+	        	int contador = Integer.parseInt(partes[ 1 ]);
+	        	String compradorString = partes[ 2 ];
 	            Usuario usuario = laGaleria.ConsultarUsuario(compradorString);
-	            Cliente comprador = (Cliente) usuario;
-	            String piezaString = partes[ 5 ];
-	            Pieza piezaVenta = laGaleria.ConsultarPieza(piezaString);
-
-	            //laGaleria.RegistrarOferta(new Venta(valor, comprador, piezaVenta));
+	            Cliente ofertador = (Cliente) usuario;
+	            double valor = Double.parseDouble(partes[ 3 ]);
+	            
+	            SubastaPieza subasta = subastas.get(contador);
+	            subasta.RecibirOferta(new Oferta(ofertador, valor));
 	        }	            
             line = br.readLine( );
         }
@@ -68,6 +73,37 @@ public class PersistenciaAcciones implements IPersistenciaAcciones
 	}
 	
 	public void salvarAcciones(String archivo, Galeria laGaleria) throws IOException {
-		
+		PrintWriter writer = new PrintWriter( archivo );
+        
+		for( SubastaPieza subasta : laGaleria.getSubastas() )
+	    {
+			String valorInicial = Double.toString(subasta.getValorInicial());
+			String valorMinimo = Double.toString(subasta.getValorMinimo());
+			String piezaSubastada = subasta.getPiezaSubastada().getCodigo();
+			String tiempoFinal = subasta.getTiempoFinal().format(formatoFecha);
+			 
+			writer.println( "subasta:" + ":" + valorInicial + ":" + valorMinimo + ":" + piezaSubastada + ":" + tiempoFinal);
+			
+			for ( Oferta oferta : subasta.getOfertas() ) 
+			{
+				String ofertador = oferta.getOfertador().getLogin();
+				String valor = Double.toString(oferta.getValor());
+				 
+				writer.println( "oferta:" + ":" + ofertador + ":" + valor);
+			}
+	    	
+	    }
+		for( Venta venta : laGaleria.getVentas() )
+	    {
+				
+			String valor = Double.toString(venta.getValor());
+			String comprador = venta.getComprador().getLogin();
+			String piezaVenta = venta.getPiezaVenta().getCodigo();
+			 
+			writer.println( "venta:" + valor + ":" + comprador + ":" + piezaVenta);
+	    	
+	    }
+
+        writer.close( );
 	}
 }

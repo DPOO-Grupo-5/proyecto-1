@@ -1,20 +1,25 @@
 package galeria.consola;
 
+import java.io.IOException;
+import java.text.ParseException;
+
 import galeria.modelo.Galeria;
 import galeria.modelo.usuario.Cliente;
+import galeria.modelo.ventas.Oferta;
+import galeria.modelo.ventas.SubastaPieza;
+import galeria.modelo.ventas.Venta;
+import galeria.persistencia.TipoInvalidoException;
 
 public class ConsolaCliente extends ConsolaBasica
 {
-    private Galeria laGaleria;
-    private String login;
-
-    public ConsolaCliente(Galeria galeria, String login)
-    {
-        this.laGaleria = galeria;
-        this.login = login;
-    }
+	private String login;
     
-    public void registrarCliente()
+    public ConsolaCliente(Galeria galeria, String login) {
+		super(galeria);
+		this.login = login;
+	}
+
+	public void registrarCliente()
     {
     	String password = pedirCadenaAlUsuario("Nueva contraseña: ");	
     	String nombre = pedirCadenaAlUsuario("Nombre: ");
@@ -25,18 +30,20 @@ public class ConsolaCliente extends ConsolaBasica
     	laGaleria.RegistrarCliente(cliente);
     }
 
-    public void correrAplicacion()
+    public void correrAplicacion() throws TipoInvalidoException, IOException, ParseException
     {
-    	Cliente cliente = (Cliente) laGaleria.ConsultarUsuario(login);
-    	boolean continuar = true;
+        boolean continuar = true;
         while (continuar)	
         {
             int opcion = mostrarMenu("Menú Cliente", new String[] {
-                "Ver información personal",
-                "Consignar pieza",
-                "Ver piezas consignadas",
-                "Actualizar pieza",
-                "Ver catálogo de piezas",
+                "Consultar información personal",
+                "Modificar datos de contacto",
+                "Cambiar contraseña",
+                "Consultar piezas",
+                "Consultar historial de compras",
+                "Ofertar en una subasta",
+                "Demostrar nuevos ingresos",
+                "Comprar pieza",
                 "Cerrar sesión",
                 "Eliminar cuenta"
             });
@@ -44,26 +51,37 @@ public class ConsolaCliente extends ConsolaBasica
             switch (opcion)
             {
                 case 1:
-                    verInformacionPersonal(cliente);
+                	System.out.println("Informacion personal:");
+                	this.imprimirCliente((Cliente) this.laGaleria.ConsultarUsuario(login));
                     break;
                 case 2:
-                    consignarPieza();
+                    modificarDatosContacto();
                     break;
                 case 3:
-                    verPiezasConsignadas();
+                    cambiarContraseña();
                     break;
                 case 4:
-                    actualizarPieza();
+                	this.consultar();
                     break;
                 case 5:
-                	verCatalogoPiezas();
-                	break;
+                    this.consultarComprador(login);
+                    break;
                 case 6:
-                    // Cerrar sesión
-                    continuar = false;
+                    ofertarSubasta();
                     break;
                 case 7:
-                    eliminarCuenta(cliente);
+                    nuevosIngresos();
+                    break;
+                case 8:
+                    comprarPieza();
+                    break;
+                case 9:
+                    // Cerrar sesión
+                	cerrarSesion();
+                    continuar = false;
+                    break;
+                case 10:
+                    eliminarCuenta();
                     continuar = false;
                     break;
                 default:
@@ -71,82 +89,88 @@ public class ConsolaCliente extends ConsolaBasica
             }
         }
     }
-
-    private void verInformacionPersonal(Cliente cliente)
+    
+    private void modificarDatosContacto()
     {
-        boolean continuar = true;
-        while (continuar)
-        {
-        	String nombre = cliente.getNombre();
-        	System.out.println("Nombre: " + nombre);
-        	String telefono = cliente.getTelefono();
-        	System.out.println("Telefono: " + telefono);
-        	String email = cliente.getEmail();
-        	System.out.println("Email: " + email);
-        	double capacidadAdquisitiva = cliente.getCapacidadAdquisitiva();
-        	System.out.println("Capacidad Adquisitiva: " + Double.toString(capacidadAdquisitiva));
-        	
-            int opcion = mostrarMenu("Actualizar Información Personal", new String[] {
-                "Registrar nuevo teléfono",
-                "Registrar nuevo correo",
-                "Cambiar capacidad adquisitiva",
-                "Volver"
+    	int opcion = mostrarMenu("Modificar Dato de Contacto", new String[] {
+                "Telefono",
+                "E-mail"
             });
 
             switch (opcion)
             {
                 case 1:
-                    registrarNuevoTelefono(cliente);
-                    System.out.println("Registro de número de teléfono exitoso");
+                	registrarNuevoTelefono();
                     break;
                 case 2:
-                    registrarNuevoCorreo(cliente);
-                    System.out.println("Registro de email exitoso");
-                    break;
-                case 3:
-                    continuar = false;
+                	registrarNuevoCorreo();
                     break;
                 default:
                     System.out.println("Opción no válida.");
             }
-        }
-    }
-
-    private void registrarNuevoTelefono(Cliente cliente)
-    {
-    	String telefono = pedirCadenaAlUsuario("Nuevo número de telefono: ");
-    	cliente.setTelefono(telefono);
-    	
-    }
-
-    private void registrarNuevoCorreo(Cliente cliente)
-    {
-    	String email = pedirCadenaAlUsuario("Nuevo email: ");
-    	cliente.setEmail(email);
-    }
-
-    private void consignarPieza()
-    {
-        // Implementa la lógica para consignar una pieza
-    }
-
-    private void verPiezasConsignadas()
-    {
-        // Implementa la lógica para ver las piezas consignadas
-    }
-
-    private void actualizarPieza()
-    {
-        // Implementa la lógica para actualizar una pieza
     }
     
-    private void verCatalogoPiezas()
+    private void registrarNuevoTelefono()
     {
+    	String telefono = pedirCadenaAlUsuario("Nuevo telefono");	
+    	this.laGaleria.ConsultarCliente(login).setTelefono(telefono);
     	
     }
 
-    private void eliminarCuenta(Cliente cliente)
+    private void registrarNuevoCorreo()
     {
-        laGaleria.EliminarCliente(cliente);
+    	String correo = pedirCadenaAlUsuario("Nuevo correo");
+    	this.laGaleria.ConsultarCliente(login).setEmail(correo);
+    }
+    
+    private void cambiarContraseña()
+    {
+    	String password = pedirCadenaAlUsuario("Nueva contraseña");
+    	this.laGaleria.ConsultarCliente(login).setPassword(password);
+    }
+    
+    private void ofertarSubasta()
+    {
+        this.piezasSubasta();
+        String codigo = pedirCadenaAlUsuario("Codiga de la pieza que se quiere ofertar");
+        double cantidad = pedirDobleAlUsuario("Valor por el cual se desea ofertar");
+        Oferta oferta = new Oferta(this.laGaleria.ConsultarCliente(login), cantidad);
+        for(SubastaPieza pieza : this.laGaleria.getSubastas()) {
+        	if(pieza.getPiezaSubastada().getCodigo().equals(codigo)) {
+        		if(pieza.RecibirOferta(oferta)) {
+            		pieza.getOfertas().add(oferta);
+            		System.out.println("Se ha registrado tu oferta correctamente.");
+        		}
+        		else {
+        			System.out.println("No se pudo registrar tu oferta.");
+        		}
+        	}
+        }
+        
+    }
+    
+    private void nuevosIngresos()
+    {
+    	double cantidad = pedirDobleAlUsuario("Nueva capacidad adquisitiva");
+        if(this.laGaleria.ConsultarCliente(login).demostrarCapacidadAdquisitiva(cantidad)) {
+        	System.out.println("Capacidad adquisitiva actualizada.");
+        }
+        else {
+        	System.out.println("No se pudo actualizar su capacidad adquisitiva.");
+        }
+    }
+    
+    private void comprarPieza()
+    {
+        this.piezasDisponiblesVenta();
+        String codigo = pedirCadenaAlUsuario("Codiga de la pieza que se quiere ofertar");
+        Venta venta = new Venta(this.laGaleria.ConsultarCliente(codigo), this.laGaleria.ConsultarPieza(codigo));
+        System.out.println("Se registro su deseo de compra, debe esperar a que el administrador autorice la venta.");
+        
+    }
+
+    private void eliminarCuenta()
+    {
+        this.laGaleria.getUsuarios().remove(this.laGaleria.ConsultarCliente(login));
     }
 }

@@ -46,17 +46,16 @@ public class SubastaPieza {
 	/**
 	 * A partir de sus atributos crea una pieza en subasta
 	 */
-	public SubastaPieza(double valorInicial, double valorMinimo, double valorOfertado, double valorActual, 
-			Pieza piezaSubastada, LocalDate tiempoInicial, LocalDate tiempoFinal) {
+	public SubastaPieza(double valorInicial, double valorMinimo, Pieza piezaSubastada, LocalDate tiempoFinal) {
 		this.valorInicial = valorInicial;
 		this.valorMinimo = valorMinimo;
 		this.valorActual = valorInicial;
 		this.ofertas = null;
 		this.piezaSubastada = piezaSubastada;
 		this.pago = null;
-		this.tiempoInicial = tiempoInicial;
+		this.tiempoInicial = LocalDate.now();
 		this.tiempoFinal = tiempoFinal;
-		this.getPiezaSubastada().setEstado(Estado.SUBASTA);
+		this.getPiezaSubastada().setEstado(Estado.SUBASTA);	
 	}
 	
 	public double getValorInicial() {
@@ -112,7 +111,7 @@ public class SubastaPieza {
 	 * @param oferta a validar
 	 * @return indica si la oferta
 	 */
-	public boolean recibirOferta(Oferta oferta) {
+	public boolean RecibirOferta(Oferta oferta) {
 		if (this.getValorInicial()<oferta.getValor()) {
 			this.setValorActual(oferta.getValor());
 			oferta.setAceptada(true);
