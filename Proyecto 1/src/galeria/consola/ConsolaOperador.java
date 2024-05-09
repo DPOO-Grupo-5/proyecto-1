@@ -1,10 +1,13 @@
 package galeria.consola;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDate;
 
 import galeria.modelo.Galeria;
 import galeria.modelo.pieza.Estado;
 import galeria.modelo.ventas.SubastaPieza;
+import galeria.persistencia.TipoInvalidoException;
 
 public class ConsolaOperador extends ConsolaBasica {
 
@@ -13,7 +16,7 @@ public class ConsolaOperador extends ConsolaBasica {
         super(galeria);
     }
 
-    public void correrAplicacion()
+    public void correrAplicacion() throws TipoInvalidoException, IOException, ParseException
     {
         boolean continuar = true;
         while (continuar)
@@ -41,6 +44,7 @@ public class ConsolaOperador extends ConsolaBasica {
                 	ponerEnVenta();
                 case 5:
                     // Cerrar sesión
+                	cerrarSesion();
                     continuar = false;
                     break;
                 default:

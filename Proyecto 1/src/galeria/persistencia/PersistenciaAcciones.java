@@ -74,24 +74,27 @@ public class PersistenciaAcciones implements IPersistenciaAcciones
 	
 	public void salvarAcciones(String archivo, Galeria laGaleria) throws IOException {
 		PrintWriter writer = new PrintWriter( archivo );
+        int contador = 1;
         
 		for( SubastaPieza subasta : laGaleria.getSubastas() )
 	    {
+			String contadorString = Integer.toString(contador);
 			String valorInicial = Double.toString(subasta.getValorInicial());
 			String valorMinimo = Double.toString(subasta.getValorMinimo());
 			String piezaSubastada = subasta.getPiezaSubastada().getCodigo();
 			String tiempoFinal = subasta.getTiempoFinal().format(formatoFecha);
 			 
-			writer.println( "subasta:" + ":" + valorInicial + ":" + valorMinimo + ":" + piezaSubastada + ":" + tiempoFinal);
+			writer.println( "subasta:" + ":" + contadorString + ":" + valorInicial + ":" + valorMinimo + ":" + piezaSubastada + ":" + tiempoFinal);
 			
 			for ( Oferta oferta : subasta.getOfertas() ) 
 			{
 				String ofertador = oferta.getOfertador().getLogin();
 				String valor = Double.toString(oferta.getValor());
 				 
-				writer.println( "oferta:" + ":" + ofertador + ":" + valor);
+				writer.println( "oferta:" + ":" + contadorString + ":" + ofertador + ":" + valor);
 			}
 	    	
+			contador++;
 	    }
 		for( Venta venta : laGaleria.getVentas() )
 	    {

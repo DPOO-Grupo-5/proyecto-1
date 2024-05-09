@@ -17,9 +17,11 @@ public class ConsolaPrincipal extends ConsolaBasica
     /**
      * Es un método que corre la aplicación y realmente no hace nada interesante: sólo muestra cómo se podría utilizar la clase Aerolínea para hacer pruebas.
      * @throws ParseException 
+     * @throws IOException 
+     * @throws TipoInvalidoException 
      */
     
-    public void correrAplicacion( ) throws ParseException
+    public void correrAplicacion( ) throws ParseException, TipoInvalidoException, IOException
     {
     	try
         {
@@ -51,7 +53,7 @@ public class ConsolaPrincipal extends ConsolaBasica
     
     }
     
-    public void correrMenuInicial()
+    public void correrMenuInicial() throws TipoInvalidoException, IOException, ParseException
     {
     	
     	boolean continuar = true;
@@ -78,8 +80,14 @@ public class ConsolaPrincipal extends ConsolaBasica
 	                    if (usuario.getRol() == Rol.ADMINISTRADOR)
 	                    {
 	                        // Menú administrador
-	                        ConsolaAdministrador consolaAdmin = new ConsolaAdministrador(laGaleria, login);
-	                        consolaAdmin.correrAplicacion();
+	                        ConsolaAdministrador consolaAdministrador = new ConsolaAdministrador(laGaleria);
+	                        consolaAdministrador.correrAplicacion();
+	                    }
+	                    else if (usuario.getRol() == Rol.OPERADOR)
+	                    {
+	                        // Menú administrador
+	                        ConsolaOperador consolaOperador = new ConsolaOperador(laGaleria);
+	                        consolaOperador.correrAplicacion();
 	                    }
 	                    else if (usuario.getRol() == Rol.CLIENTE)
 	                    {
@@ -117,7 +125,7 @@ public class ConsolaPrincipal extends ConsolaBasica
         }
     }
 
-    public static void main( String[] args ) throws ParseException
+    public static void main( String[] args ) throws ParseException, TipoInvalidoException, IOException
     {
         ConsolaPrincipal cp = new ConsolaPrincipal( );
         cp.correrAplicacion( );

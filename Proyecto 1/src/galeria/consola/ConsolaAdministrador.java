@@ -140,18 +140,18 @@ public class ConsolaAdministrador extends ConsolaBasica
     
     private void informacionPieza(Pieza pieza)
     {
-    	pieza.setTitulo(this.pedirCadenaAlUsuario("Titulo"));
-    	pieza.setYearCreacion(this.pedirCadenaAlUsuario("Año de Creacion"));
-    	pieza.setLugarCreacion(this.pedirCadenaAlUsuario("Lugar de Creacion"));
+    	pieza.setTitulo(this.pedirCadenaAlUsuario("Titulo: "));
+    	pieza.setYearCreacion(this.pedirCadenaAlUsuario("Año de Creacion: "));
+    	pieza.setLugarCreacion(this.pedirCadenaAlUsuario("Lugar de Creacion: "));
     	List<String> autores = new ArrayList<String>( );
-    	int cantidad = this.pedirEnteroAlUsuario("Cantidad de Autores");
+    	int cantidad = this.pedirEnteroAlUsuario("Cantidad de Autores: ");
     	for(int i=0; i<cantidad; i++) {
-    		autores.addLast(this.pedirCadenaAlUsuario("Autor"));
+    		autores.addLast(this.pedirCadenaAlUsuario("Autor: "));
     	}
     	pieza.setAutor(autores);
     	pieza.setEstado(Estado.BODEGA);
-    	pieza.setAlto(this.pedirDobleAlUsuario("Alto"));
-    	pieza.setAncho(this.pedirDobleAlUsuario("Ancho"));
+    	pieza.setAlto(this.pedirDobleAlUsuario("Alto: "));
+    	pieza.setAncho(this.pedirDobleAlUsuario("Ancho: "));
     	
     	if(this.accionesPieza(pieza)) {
     		this.laGaleria.getInventario().add(pieza);
@@ -186,18 +186,20 @@ public class ConsolaAdministrador extends ConsolaBasica
     
     private void registrarPintura(String codigo)
     {
-        Pintura pintura = new Pintura();
-        pintura.setCodigo(codigo);
-        pintura.setTipo(Tipo.PINTURA);
-        this.informacionPieza(pintura);
         
+        
+        this.informacionPieza(pintura);
         List<String> tecnicas = new ArrayList<String>( );
-    	int cantidad = this.pedirEnteroAlUsuario("Cantidad de Tecnicas");
+    	int cantidad = this.pedirEnteroAlUsuario("Cantidad de Tecnicas: ");
     	for(int i=0; i<cantidad; i++) {
-    		tecnicas.addLast(this.pedirCadenaAlUsuario("Tecnica"));
+    		tecnicas.addLast(this.pedirCadenaAlUsuario("Tecnica: "));
     	}
-    	pintura.setTecnicas(tecnicas);
-    	pintura.setPeso(this.pedirDobleAlUsuario("Peso"));
+
+    	double peso = this.pedirDobleAlUsuario("Peso: "));
+    	Pintura pintura = new Pintura(codigo, titulo, yearCreacion, lugarCreacion, autor,
+    			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, 
+    			esConsignacion, fechaInicioConsignacion, fechaFinConsignacion, propietario, tecnicas, peso);
+    	laGaleria.RegistrarPieza(pintura);
     }
     
     private void registrarEscultura(String codigo)
