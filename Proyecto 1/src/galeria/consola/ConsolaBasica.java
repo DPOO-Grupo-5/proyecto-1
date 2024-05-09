@@ -494,6 +494,9 @@ public abstract class ConsolaBasica
     }
     
     protected void cerrarSesion() throws TipoInvalidoException, IOException, ParseException {
+    	laGaleria.ActualizarEstadosPiezasConsignacion();
+    	laGaleria.ActualizarEstadosPiezasSubasta();
+    	
     	String archivoPiezas = "piezas.txt"; 
         laGaleria.salvarPiezas( "./datos/" + archivoPiezas, CentralPersistencia.PLAIN );
         

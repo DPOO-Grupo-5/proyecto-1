@@ -49,6 +49,8 @@ public class ConsolaPrincipal extends ConsolaBasica
             e.printStackTrace();
         }
     	
+    	laGaleria.ActualizarEstadosPiezasConsignacion();
+    	laGaleria.ActualizarEstadosPiezasSubasta();
     	correrMenuInicial();
     
     }
