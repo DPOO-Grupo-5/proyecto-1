@@ -53,6 +53,10 @@ public class Impresion extends Pieza
 		this.tipoImpresion = tipoImpresion;
 	}
 	
+	public Impresion() {
+		super();
+	}
+
 	public String getMaterial() {
 		return material;
 	}

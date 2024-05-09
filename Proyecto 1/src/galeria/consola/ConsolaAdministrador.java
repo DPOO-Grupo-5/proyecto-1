@@ -1,12 +1,7 @@
 package galeria.consola;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import galeria.modelo.Galeria;
 import galeria.modelo.pieza.Escultura;
@@ -23,7 +18,6 @@ import galeria.modelo.usuario.Empleado;
 import galeria.modelo.usuario.Rol;
 import galeria.modelo.usuario.Usuario;
 import galeria.modelo.ventas.Venta;
-import galeria.persistencia.TipoInvalidoException;
 
 public class ConsolaAdministrador extends ConsolaBasica
 {
@@ -33,7 +27,7 @@ public class ConsolaAdministrador extends ConsolaBasica
         super(galeria);
     }
     
-	public void correrAplicacion() throws TipoInvalidoException, IOException, ParseException
+	public void correrAplicacion()
     {
         boolean continuar = true;
         while (continuar)
@@ -83,7 +77,7 @@ public class ConsolaAdministrador extends ConsolaBasica
         }
     }
 	
-    private void registrarPieza() throws TipoInvalidoException, IOException, ParseException
+    private void registrarPieza()
     {
     	String codigo = this.pedirCadenaAlUsuario("Codigo");
         if(this.laGaleria.VerificarCodigoPieza(codigo)) {
@@ -131,7 +125,6 @@ public class ConsolaAdministrador extends ConsolaBasica
 		            	registrarOtro(codigo);
 		            	break;
 		            case 7:
-		            	cerrarSesion();
 		            	continuar = false;
 		            	break;
 		            default:
@@ -141,33 +134,29 @@ public class ConsolaAdministrador extends ConsolaBasica
         }
     }
     
-/*
-    private Map<String, Object> informacionPieza()
+    private void informacionPieza(Pieza pieza)
     {
-    	Map<String, Object> informacion = new HashMap<>();
-    	
-    	String titulo = this.pedirCadenaAlUsuario("Titulo: ");
-    	informacion.put("titulo", titulo);
-    	String yearCreacion = this.pedirCadenaAlUsuario("Año de Creacion: ");
-    	informacion.put("yearCreacion", yearCreacion);
-    	String lugarCreacion =this.pedirCadenaAlUsuario("Lugar de Creacion: ");
-    	informacion.put("lugarCreacion", lugarCreacion);
+    	pieza.setTitulo(this.pedirCadenaAlUsuario("Titulo"));
+    	pieza.setYearCreacion(this.pedirCadenaAlUsuario("Año de Creacion"));
+    	pieza.setLugarCreacion(this.pedirCadenaAlUsuario("Lugar de Creacion"));
     	List<String> autores = new ArrayList<String>( );
-    	int cantidad = this.pedirEnteroAlUsuario("Cantidad de Autores: ");
+    	int cantidad = this.pedirEnteroAlUsuario("Cantidad de Autores");
     	for(int i=0; i<cantidad; i++) {
-    		autores.addLast(this.pedirCadenaAlUsuario("Autor: "));
+    		autores.addLast(this.pedirCadenaAlUsuario("Autor"));
     	}
-    	informacion.put("autores", autores);
-    	Estado estado = Estado.BODEGA;
-    	informacion.put("estado", estado);
-    	double alto = this.pedirDobleAlUsuario("Alto: ");
-    	informacion.put("alto", alto);
-    	double ancho = this.pedirDobleAlUsuario("Ancho: ");
-    	informacion.put("ancho", ancho);
+    	pieza.setAutor(autores);
+    	pieza.setEstado(Estado.BODEGA);
+    	pieza.setAlto(this.pedirDobleAlUsuario("Alto"));
+    	pieza.setAncho(this.pedirDobleAlUsuario("Ancho"));
     	
-    	return informacion;
+    	if(this.accionesPieza(pieza)) {
+    		this.laGaleria.getInventario().add(pieza);
+    		System.out.println("Pieza registrada exitosamente.");
+    	}
+    	else {
+    		System.out.println("No se pudo registrar la pieza.");
+    	}
     }
-*/
     
     private boolean accionesPieza(Pieza pieza) {
     	pieza.setDisponibilidadVentaDirecta(pedirConfirmacionAlUsuario("La pieza se encuentra disponible para la venta"));
@@ -193,57 +182,22 @@ public class ConsolaAdministrador extends ConsolaBasica
     
     private void registrarPintura(String codigo)
     {
-    	String titulo = this.pedirCadenaAlUsuario("Titulo: ");
-    	String yearCreacion = this.pedirCadenaAlUsuario("Año de Creacion: ");
-    	String lugarCreacion =this.pedirCadenaAlUsuario("Lugar de Creacion: ");
-    	List<String> autores = new ArrayList<String>( );
-    	int cantidadAutores = this.pedirEnteroAlUsuario("Cantidad de Autores: ");
-    	for(int i=0; i<cantidadAutores; i++) {
-    		autores.addLast(this.pedirCadenaAlUsuario("Autor: "));
-    	}
-    	Estado estado = Estado.BODEGA;
-    	double alto = this.pedirDobleAlUsuario("Alto: ");
-    	double ancho = this.pedirDobleAlUsuario("Ancho: ");
-
-            
+        Pintura pintura = new Pintura();
+        pintura.setCodigo(codigo);
+        pintura.setTipo(Tipo.PINTURA);
+        this.informacionPieza(pintura);
+        
         List<String> tecnicas = new ArrayList<String>( );
-    	int cantidadTecnicas = this.pedirEnteroAlUsuario("Cantidad de Tecnicas: ");
-    	for(int i=0; i<cantidadTecnicas; i++) {
-    		tecnicas.addLast(this.pedirCadenaAlUsuario("Tecnica: "));
+    	int cantidad = this.pedirEnteroAlUsuario("Cantidad de Tecnicas");
+    	for(int i=0; i<cantidad; i++) {
+    		tecnicas.addLast(this.pedirCadenaAlUsuario("Tecnica"));
     	}
-    	double peso = this.pedirDobleAlUsuario("Peso: ");
-    	
-    	/*
-    	Pintura pintura = new Pintura(codigo, titulo, yearCreacion, lugarCreacion, autores,
-    			estado, alto, ancho, disponibilidadVentaDirecta, valorFijoVentaDirecta, 
-    			esConsignacion, fechaInicioConsignacion, fechaFinConsignacion, propietario, tecnicas, peso);
-    	laGaleria.RegistrarPieza(pintura);
-    	
-    	if(this.accionesPieza(pintura)) {
-    		this.laGaleria.getInventario().add(pintura);
-    		System.out.println("Pieza registrada exitosamente.");
-    	}
-    	else {
-    		System.out.println("No se pudo registrar la pieza.");
-    	}
-    	*/
+    	pintura.setTecnicas(tecnicas);
+    	pintura.setPeso(this.pedirDobleAlUsuario("Peso"));
     }
     
     private void registrarEscultura(String codigo)
     {
-    	String titulo = this.pedirCadenaAlUsuario("Titulo: ");
-    	String yearCreacion = this.pedirCadenaAlUsuario("Año de Creacion: ");
-    	String lugarCreacion =this.pedirCadenaAlUsuario("Lugar de Creacion: ");
-    	List<String> autores = new ArrayList<String>( );
-    	int cantidadAutores = this.pedirEnteroAlUsuario("Cantidad de Autores: ");
-    	for(int i=0; i<cantidadAutores; i++) {
-    		autores.addLast(this.pedirCadenaAlUsuario("Autor: "));
-    	}
-    	Estado estado = Estado.BODEGA;
-    	double alto = this.pedirDobleAlUsuario("Alto: ");
-    	double ancho = this.pedirDobleAlUsuario("Ancho: ");
-
-    	/*
     	Escultura escultura = new Escultura();
     	escultura.setCodigo(codigo);
     	escultura.setTipo(Tipo.ESCULTURA);
@@ -264,32 +218,10 @@ public class ConsolaAdministrador extends ConsolaBasica
     		detalles.addLast(this.pedirCadenaAlUsuario("Detalle"));
     	}
     	escultura.setDetallesInstalacion(detalles);
-    	
-    	if(this.accionesPieza(pieza)) {
-    		this.laGaleria.getInventario().add(pieza);
-    		System.out.println("Pieza registrada exitosamente.");
-    	}
-    	else {
-    		System.out.println("No se pudo registrar la pieza.");
-    	}
-    	*/
     }
     
     private void registrarVideo(String codigo)
     {
-    	String titulo = this.pedirCadenaAlUsuario("Titulo: ");
-    	String yearCreacion = this.pedirCadenaAlUsuario("Año de Creacion: ");
-    	String lugarCreacion =this.pedirCadenaAlUsuario("Lugar de Creacion: ");
-    	List<String> autores = new ArrayList<String>( );
-    	int cantidadAutores = this.pedirEnteroAlUsuario("Cantidad de Autores: ");
-    	for(int i=0; i<cantidadAutores; i++) {
-    		autores.addLast(this.pedirCadenaAlUsuario("Autor: "));
-    	}
-    	Estado estado = Estado.BODEGA;
-    	double alto = this.pedirDobleAlUsuario("Alto: ");
-    	double ancho = this.pedirDobleAlUsuario("Ancho: ");
-
-    	/*
     	Video video = new Video();
     	video.setCodigo(codigo);
     	video.setTipo(Tipo.VIDEO);
@@ -299,32 +231,10 @@ public class ConsolaAdministrador extends ConsolaBasica
         video.setResolucion(this.pedirCadenaAlUsuario("Resolucion"));
         video.setTamano(this.pedirEnteroAlUsuario("Tamaño"));
         video.setFormato(this.pedirCadenaAlUsuario("Formato"));
-        
-        if(this.accionesPieza(pieza)) {
-    		this.laGaleria.getInventario().add(pieza);
-    		System.out.println("Pieza registrada exitosamente.");
-    	}
-    	else {
-    		System.out.println("No se pudo registrar la pieza.");
-    	}
-    	*/
     }
     
     private void registrarFotografia(String codigo)
     {
-    	String titulo = this.pedirCadenaAlUsuario("Titulo: ");
-    	String yearCreacion = this.pedirCadenaAlUsuario("Año de Creacion: ");
-    	String lugarCreacion =this.pedirCadenaAlUsuario("Lugar de Creacion: ");
-    	List<String> autores = new ArrayList<String>( );
-    	int cantidadAutores = this.pedirEnteroAlUsuario("Cantidad de Autores: ");
-    	for(int i=0; i<cantidadAutores; i++) {
-    		autores.addLast(this.pedirCadenaAlUsuario("Autor: "));
-    	}
-    	Estado estado = Estado.BODEGA;
-    	double alto = this.pedirDobleAlUsuario("Alto: ");
-    	double ancho = this.pedirDobleAlUsuario("Ancho: ");
-
-    	/*
     	Fotografia fotografia = new Fotografia();
     	fotografia.setCodigo(codigo);
     	fotografia.setTipo(Tipo.FOTOGRAFIA);
@@ -333,32 +243,10 @@ public class ConsolaAdministrador extends ConsolaBasica
         fotografia.setResolucion(this.pedirCadenaAlUsuario("Resolucion"));
         fotografia.setTamano(this.pedirEnteroAlUsuario("Tamaño"));
         fotografia.setFormato(this.pedirCadenaAlUsuario("Formato"));
-        
-        if(this.accionesPieza(pieza)) {
-    		this.laGaleria.getInventario().add(pieza);
-    		System.out.println("Pieza registrada exitosamente.");
-    	}
-    	else {
-    		System.out.println("No se pudo registrar la pieza.");
-    	}
-    	*/
     }
     
     private void registrarImpresion(String codigo)
     {
-    	String titulo = this.pedirCadenaAlUsuario("Titulo: ");
-    	String yearCreacion = this.pedirCadenaAlUsuario("Año de Creacion: ");
-    	String lugarCreacion =this.pedirCadenaAlUsuario("Lugar de Creacion: ");
-    	List<String> autores = new ArrayList<String>( );
-    	int cantidadAutores = this.pedirEnteroAlUsuario("Cantidad de Autores: ");
-    	for(int i=0; i<cantidadAutores; i++) {
-    		autores.addLast(this.pedirCadenaAlUsuario("Autor: "));
-    	}
-    	Estado estado = Estado.BODEGA;
-    	double alto = this.pedirDobleAlUsuario("Alto: ");
-    	double ancho = this.pedirDobleAlUsuario("Ancho: ");
-
-    	/*
     	Impresion impresion = new Impresion();
     	impresion.setCodigo(codigo);
     	impresion.setTipo(Tipo.IMPRESION);
@@ -366,45 +254,14 @@ public class ConsolaAdministrador extends ConsolaBasica
         
         impresion.setMaterial(this.pedirCadenaAlUsuario("Material"));
         impresion.setTipoImpresion(this.pedirCadenaAlUsuario("Tipo de impresion"));
-        
-        if(this.accionesPieza(pieza)) {
-    		this.laGaleria.getInventario().add(pieza);
-    		System.out.println("Pieza registrada exitosamente.");
-    	}
-    	else {
-    		System.out.println("No se pudo registrar la pieza.");
-    	}
-    	*/
     }
     
     private void registrarOtro(String codigo)
     {
-    	String titulo = this.pedirCadenaAlUsuario("Titulo: ");
-    	String yearCreacion = this.pedirCadenaAlUsuario("Año de Creacion: ");
-    	String lugarCreacion =this.pedirCadenaAlUsuario("Lugar de Creacion: ");
-    	List<String> autores = new ArrayList<String>( );
-    	int cantidadAutores = this.pedirEnteroAlUsuario("Cantidad de Autores: ");
-    	for(int i=0; i<cantidadAutores; i++) {
-    		autores.addLast(this.pedirCadenaAlUsuario("Autor: "));
-    	}
-    	Estado estado = Estado.BODEGA;
-    	double alto = this.pedirDobleAlUsuario("Alto: ");
-    	double ancho = this.pedirDobleAlUsuario("Ancho: ");
-
-    	/*
     	Otro otro = new Otro();
     	otro.setCodigo(codigo);
     	otro.setTipo(Tipo.OTRO);
         this.informacionPieza(otro);
-        
-        if(this.accionesPieza(pieza)) {
-    		this.laGaleria.getInventario().add(pieza);
-    		System.out.println("Pieza registrada exitosamente.");
-    	}
-    	else {
-    		System.out.println("No se pudo registrar la pieza.");
-    	}
-    	*/
     }
     
     private void registrarOperador()

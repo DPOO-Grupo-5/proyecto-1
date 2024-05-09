@@ -33,4 +33,7 @@ public class Otro extends Pieza
 				valorFijoVentaDirecta, esConsignacion, fechaInicioConsignacion, fechaFinConsignacion,
 				propietarioConsignacion);
 	}
+	public Otro() {
+		super();
+	}
 }

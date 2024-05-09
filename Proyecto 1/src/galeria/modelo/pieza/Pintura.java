@@ -54,6 +54,10 @@ public class Pintura extends Pieza
 		this.peso = peso;
 	}
 	
+	public Pintura() {
+		super();
+	}
+
 	public List<String> getTecnicas() {
 		return tecnicas;
 	}

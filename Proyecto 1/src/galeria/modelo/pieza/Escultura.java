@@ -78,6 +78,10 @@ public class Escultura extends Pieza
 		this.detallesInstalacion = detallesInstalacion;
 	}
 
+	public Escultura() {
+		super();
+	}
+
 	public double getProfundidad() {
 		return profundidad;
 	}

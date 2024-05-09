@@ -137,6 +137,9 @@ public abstract class Pieza {
 		this.propietario = propietario;
 	}
 	
+	public Pieza() {
+	}
+	
 	public String getCodigo() {
 		return codigo;
 	}

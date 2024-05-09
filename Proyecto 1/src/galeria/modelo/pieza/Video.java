@@ -68,6 +68,10 @@ public class Video extends Pieza
 		this.formato = formato;
 	}
 	
+	public Video() {
+		super();
+	}
+	
 	public int getDuracion() {
 		return duracion;
 	}

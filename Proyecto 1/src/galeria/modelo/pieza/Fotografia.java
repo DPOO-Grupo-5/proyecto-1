@@ -63,6 +63,10 @@ public class Fotografia extends Pieza
 		this.formato = formato;
 	}
 	
+	public Fotografia() {
+		super();
+	}
+
 	public String getResolucion() {
 		return resolucion;
 	}
