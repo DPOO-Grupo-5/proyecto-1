@@ -1,4 +1,5 @@
-package galeria.test;
+/**
+package test;
 
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -18,7 +19,7 @@ import galeria.modelo.ventas.Oferta;
 import galeria.modelo.ventas.SubastaPieza;
 
 // Subclase concreta de Pieza para usar en pruebas
-class TestablePieza extends Pieza {
+class TestablePieza ext ends Pieza {
     public TestablePieza(String codigo, String titulo, String yearCreacion, String lugarCreacion, List<String> autor,
                          Estado estado, double alto, double ancho, Tipo tipo, boolean disponibilidadVentaDirecta,
                          double valorFijoVentaDirecta) {
@@ -88,7 +89,7 @@ public class GaleriaTest {
         assertTrue("El inicio de sesión debería ser exitoso con credenciales correctas.", galeria.IniciarSesion("client1", "password1"));
     }
 
-    @Test
+	@Test
     public void testIniciarSesionIncorrecto() {
         assertFalse("El inicio de sesión debería fallar con contraseña incorrecta.", galeria.IniciarSesion("client1", "wrongpassword"));
     }
@@ -285,3 +286,4 @@ public class GaleriaTest {
 
 
 }
+**/

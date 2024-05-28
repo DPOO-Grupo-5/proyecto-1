@@ -5,6 +5,7 @@ import java.text.ParseException;
 
 import galeria.excepciones.InformacionInconsistenteException;
 import galeria.modelo.Galeria;
+import galeria.modelo.usuario.Empleado;
 import galeria.modelo.usuario.Rol;
 import galeria.modelo.usuario.Usuario;
 import galeria.persistencia.CentralPersistencia;
@@ -12,20 +13,23 @@ import galeria.persistencia.TipoInvalidoException;
 
 public class ConsolaPrincipal extends ConsolaBasica
 {
-    private Galeria laGaleria;
+	
+    public ConsolaPrincipal() {
+		super();
+	}
 
-    /**
+	/**
      * Es un método que corre la aplicación y realmente no hace nada interesante: sólo muestra cómo se podría utilizar la clase Aerolínea para hacer pruebas.
      * @throws ParseException 
-     * @throws IOException 
-     * @throws TipoInvalidoException 
+	 * @throws IOException 
+	 * @throws TipoInvalidoException 
      */
     
     public void correrAplicacion( ) throws ParseException, TipoInvalidoException, IOException
     {
     	try
         {
-    		laGaleria = new Galeria( );
+            laGaleria = new Galeria( );
             // String archivo = this.pedirCadenaAlUsuario( "Digite el nombre del archivo json con la información de una aerolinea" );            
             String archivoPiezas = "piezas.txt"; 
             laGaleria.cargarPiezas( "./datos/" + archivoPiezas, CentralPersistencia.PLAIN );
@@ -35,6 +39,9 @@ public class ConsolaPrincipal extends ConsolaBasica
             
             String archivoAcciones = "acciones.txt"; 
             laGaleria.cargarAcciones( "./datos/" + archivoAcciones, CentralPersistencia.PLAIN );
+            
+            Empleado administrador = new Empleado(Rol.ADMINISTRADOR, "admin", "1234", "admin");
+            laGaleria.getUsuarios().add(administrador);
         }
         catch( TipoInvalidoException e )
         {
@@ -49,15 +56,12 @@ public class ConsolaPrincipal extends ConsolaBasica
             e.printStackTrace();
         }
     	
-    	laGaleria.ActualizarEstadosPiezasConsignacion();
-    	laGaleria.ActualizarEstadosPiezasSubasta();
     	correrMenuInicial();
-    
+
     }
-    
+
     public void correrMenuInicial() throws TipoInvalidoException, IOException, ParseException
     {
-    	
     	boolean continuar = true;
         while (continuar)
         {
@@ -71,8 +75,8 @@ public class ConsolaPrincipal extends ConsolaBasica
             {
                 case 1:
                     // Iniciar sesión
-                    String login = pedirCadenaAlUsuario("Usuario: ");
-                    String password = pedirCadenaAlUsuario("Contraseña: ");
+                    String login = pedirCadenaAlUsuario("Usuario");
+                    String password = pedirCadenaAlUsuario("Contraseña");
                     
                     boolean inicioSesion = laGaleria.IniciarSesion(login, password);
 
@@ -82,20 +86,20 @@ public class ConsolaPrincipal extends ConsolaBasica
 	                    if (usuario.getRol() == Rol.ADMINISTRADOR)
 	                    {
 	                        // Menú administrador
-	                        ConsolaAdministrador consolaAdministrador = new ConsolaAdministrador(laGaleria);
-	                        consolaAdministrador.correrAplicacion();
-	                    }
-	                    else if (usuario.getRol() == Rol.OPERADOR)
-	                    {
-	                        // Menú administrador
-	                        ConsolaOperador consolaOperador = new ConsolaOperador(laGaleria);
-	                        consolaOperador.correrAplicacion();
+	                        ConsolaAdministrador consolaAdmin = new ConsolaAdministrador(laGaleria);
+	                        consolaAdmin.correrAplicacion();
 	                    }
 	                    else if (usuario.getRol() == Rol.CLIENTE)
 	                    {
 	                        // Menú cliente
 	                        ConsolaCliente consolaCliente = new ConsolaCliente(laGaleria, login);
 	                        consolaCliente.correrAplicacion();
+	                    }
+	                    else if (usuario.getRol() == Rol.OPERADOR)
+	                    {
+	                        // Menú cliente
+	                        ConsolaOperador consolaOperador = new ConsolaOperador(laGaleria);
+	                        consolaOperador.correrAplicacion();
 	                    }
                     
             		}
@@ -106,7 +110,7 @@ public class ConsolaPrincipal extends ConsolaBasica
                     break;
                 case 2:
                     // Registrarse
-                    String nuevoUsuario = pedirCadenaAlUsuario("Nuevo login");
+                	String nuevoUsuario = pedirCadenaAlUsuario("Nuevo login");
                     if (laGaleria.ComprobarUsuario(nuevoUsuario)) {
                     	System.out.println("Usuario ya existente");
                     } else {
@@ -114,7 +118,6 @@ public class ConsolaPrincipal extends ConsolaBasica
                         consolaCliente.registrarCliente();
                         System.out.println("Registro exitoso");
                     }
-                    
                     correrMenuInicial();
                     break;
                 case 3:
@@ -129,7 +132,7 @@ public class ConsolaPrincipal extends ConsolaBasica
 
     public static void main( String[] args ) throws ParseException, TipoInvalidoException, IOException
     {
-        ConsolaPrincipal cp = new ConsolaPrincipal( );
+        ConsolaPrincipal cp = new ConsolaPrincipal();
         cp.correrAplicacion( );
     }
 }

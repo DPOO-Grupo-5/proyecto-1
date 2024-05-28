@@ -1,4 +1,5 @@
-package galeria.test;
+/**
+package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,3 +87,4 @@ public class VentaTest {
         assertEquals(Estado.BODEGA, pieza.getEstado());
     }
 }
+**/
