@@ -25,7 +25,7 @@ public class PagoPayuTxt implements MedioPago{
 		try {
 			PrintWriter writer = new PrintWriter( archivo );
 			
-			writer.println(numeroTransaccion + ";" + fecha + ";" + nombre + ";" + email + ";" + numeroCuenta + ";" + valor);
+			writer.println(numeroTransaccion + ";" + fecha + ";" + nombre + ";" + email + ";" + numeroTarjeta + ";" + valor);
 			writer.close();
 			
 		} catch (FileNotFoundException e) {
