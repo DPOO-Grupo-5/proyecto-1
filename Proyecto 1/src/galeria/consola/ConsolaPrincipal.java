@@ -40,8 +40,11 @@ public class ConsolaPrincipal extends ConsolaBasica
             String archivoAcciones = "acciones.txt"; 
             laGaleria.cargarAcciones( "./datos/" + archivoAcciones, CentralPersistencia.PLAIN );
             
-            Empleado administrador = new Empleado(Rol.ADMINISTRADOR, "admin", "1234", "admin");
-            laGaleria.getUsuarios().add(administrador);
+            if (!laGaleria.ComprobarUsuario("admin")) {
+            	Empleado administrador = new Empleado(Rol.ADMINISTRADOR, "admin", "1234", "admin");
+                laGaleria.getUsuarios().add(administrador);
+            }
+            
         }
         catch( TipoInvalidoException e )
         {

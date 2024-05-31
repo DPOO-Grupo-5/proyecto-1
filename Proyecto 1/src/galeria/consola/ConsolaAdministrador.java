@@ -1,5 +1,7 @@
 package galeria.consola;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import galeria.modelo.usuario.Empleado;
 import galeria.modelo.usuario.Rol;
 import galeria.modelo.usuario.Usuario;
 import galeria.modelo.ventas.Venta;
+import galeria.persistencia.TipoInvalidoException;
 
 public class ConsolaAdministrador extends ConsolaBasica
 {
@@ -27,7 +30,7 @@ public class ConsolaAdministrador extends ConsolaBasica
         super(galeria);
     }
     
-	public void correrAplicacion()
+	public void correrAplicacion() throws TipoInvalidoException, IOException, ParseException
     {
         boolean continuar = true;
         while (continuar)
@@ -69,6 +72,7 @@ public class ConsolaAdministrador extends ConsolaBasica
                 	break;
                 case 8:
                     // Cerrar sesión
+                	cerrarSesion();
                     continuar = false;
                     break;
                 default:

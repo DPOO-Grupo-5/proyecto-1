@@ -1,5 +1,7 @@
 package galeria.modelo.ventas;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 import galeria.modelo.pieza.Estado;
@@ -23,35 +25,48 @@ public class Venta {
 	 */
 	private boolean aceptada;
 	/**
-	 * Inidca si el propietario de la pieza la tiene en el momento de la consulta
+	 * Indica si el propietario de la pieza la tiene en el momento de la consulta
 	 */
 	private boolean activo;
 	/**
-	 * Inidca el medio de pago con el que se realizo la compra
+	 * Indica el medio de pago con el que se realizo la compra
 	 */
 	private MedioPago medioPago;
 	/**
-	 * Inidca la pieza que se esta comprando
+	 * Indica la pieza que se esta comprando
 	 */
 	private Pieza piezaVenta;
 	/**
-	 * Inidca la fecha de la venta
+	 * Indica la fecha de la venta
 	 */
 	private Date fecha;
 	
 	/**
 	 * Crea una venta relacionando el cliente con el valor y la pieza, en el caso de una subasta. Ademas cambia el estado de la pieza a bloqueado hasta que se efectue el pago
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
 	 */
-	public Venta(double valor, Cliente comprador, Pieza piezaVenta) {
+	public Venta(double valor, Cliente comprador, Pieza piezaVenta, String medioElegido) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		this.valor = valor;
 		this.comprador = comprador;
 		this.aceptada = false;
 		this.activo = false;
-		this.medioPago = null;
 		this.piezaVenta = piezaVenta;
 		this.fecha = null;
 		this.getPiezaVenta().setEstado(Estado.BLOQUEADO);
 		this.getPiezaVenta().setDisponibilidadVentaDirecta(false);
+		
+		Class<?> clase = Class.forName(medioElegido);
+		Constructor<?> constructor = clase.getDeclaredConstructor(Cliente.class, double.class, Date.class);
+				
+		this.medioPago = (MedioPago) constructor.newInstance(this.comprador, this.valor, fecha);
+		
+		
 	}
 	/**
 	 * Crea una venta relacionando el cliente y la pieza, en el caso de una venta directa. Ademas cambia el estado de la pieza a bloqueado hasta que se efectue el pago
@@ -112,6 +127,7 @@ public class Venta {
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
+	
 	/**
 	 * Descuenta el valor de la compra de el valor maximo de compras asignado para el cliente
 	 * @param venta que se va a descontar
