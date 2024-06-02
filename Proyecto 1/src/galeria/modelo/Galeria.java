@@ -459,7 +459,15 @@ public class Galeria {
     */
 	public boolean FinalizarSubasta (SubastaPieza piezasubastar) {
 		if(this.OfertaGanadora(piezasubastar.getOfertas().getFirst(), piezasubastar.getValorMinimo())) {
-			Venta pago = new Venta(piezasubastar.getValorActual(), (Cliente) piezasubastar.getOfertas().getFirst().getOfertador(), piezasubastar.getPiezaSubastada());
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean VenderPiezaSubasta (SubastaPieza piezasubastar, String medioPago) {
+		if(this.OfertaGanadora(piezasubastar.getOfertas().getFirst(), piezasubastar.getValorMinimo())) {
+			Venta pago = new Venta(piezasubastar.getValorActual(), (Cliente) piezasubastar.getOfertas().getFirst().getOfertador(), piezasubastar.getPiezaSubastada(), medioPago);
+			RegistrarVenta(pago);
 			piezasubastar.setPago(pago);
 			return true;
 		}

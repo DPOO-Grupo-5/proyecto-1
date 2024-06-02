@@ -1,1 +1,2 @@
-cliente:diego1:1234:Diego:1234:correo@correo:10000:1000:true:vangogh
+cliente:diego1:1234:Diego:1234:correo@correo:10000.0:0.0:false:vangogh
+empleado:ADMINISTRADOR:admin:1234:admin

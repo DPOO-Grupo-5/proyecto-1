@@ -497,6 +497,8 @@ public abstract class ConsolaBasica
     	laGaleria.ActualizarEstadosPiezasConsignacion();
     	laGaleria.ActualizarEstadosPiezasSubasta();
     	
+    	//System.out.println(laGaleria.getUsuarios());
+    	
     	String archivoPiezas = "piezas.txt"; 
         laGaleria.salvarPiezas( "./datos/" + archivoPiezas, CentralPersistencia.PLAIN );
         

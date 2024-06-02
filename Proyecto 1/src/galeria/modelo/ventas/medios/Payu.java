@@ -1,4 +1,4 @@
-package galeria.modelo.ventas;
+package galeria.modelo.ventas.medios;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -7,12 +7,12 @@ import java.time.format.DateTimeFormatter;
 
 import galeria.modelo.usuario.Cliente;
 
-public class PagoPayuTxt implements MedioPago{
+public class Payu implements MedioPago{
 
 	DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
 	@Override
-	public boolean ProcesarPago(Cliente comprador, double valor, LocalDate fecha, String numeroTarjeta, String numeroTransaccion) {
+	public boolean procesarPago(Cliente comprador, double valor, LocalDate fecha, String numeroTarjeta, String numeroTransaccion) {
 		String nombre = comprador.getNombre();
 		String email = comprador.getEmail();
 		String fechaString = fecha.format(formatoFecha);
@@ -25,7 +25,7 @@ public class PagoPayuTxt implements MedioPago{
 		try {
 			PrintWriter writer = new PrintWriter( archivo );
 			
-			writer.println(numeroTransaccion + ";" + fecha + ";" + nombre + ";" + email + ";" + numeroTarjeta + ";" + valor);
+			writer.println(numeroTransaccion + ":" + fecha + ":" + nombre + ":" + email + ":" + numeroTarjeta + ":" + valor);
 			writer.close();
 			
 		} catch (FileNotFoundException e) {

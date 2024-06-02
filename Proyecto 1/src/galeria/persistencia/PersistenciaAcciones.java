@@ -25,51 +25,55 @@ public class PersistenciaAcciones implements IPersistenciaAcciones
 	
 	DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
-	public void cargarAcciones(String archivo, Galeria laGaleria) throws IOException, ParseException
+	public void cargarAcciones(String archivo, Galeria laGaleria)
 	{
 		Map<Integer, SubastaPieza> subastas = new HashMap<>();
-		BufferedReader br = new BufferedReader( new FileReader( archivo ) );
-        String line = br.readLine( );
-        while( line != null )
-        {
-            String[] partes = line.split( ":" );
-            if (partes[0].equals("subasta"))
-			{
-            	int contador = Integer.parseInt(partes[ 1 ]);
-            	double valorInicial = Double.parseDouble(partes[ 2 ]);
-	            double valorMinimo = Double.parseDouble(partes[ 3 ]);
-	            Pieza piezaSubastada = laGaleria.ConsultarPieza(partes[ 4 ]);
-	            LocalDate tiempoFinal = LocalDate.parse(partes[ 5 ], formatoFecha);
-	            
-	            SubastaPieza subasta = new SubastaPieza(valorInicial, valorMinimo, piezaSubastada, tiempoFinal);
-	            laGaleria.RegistrarSubasta(subasta);
-	            subastas.put(contador, subasta);
-			}
-	        else if (partes[0].equals("venta"))
+		try (BufferedReader br = new BufferedReader(new FileReader( archivo ))) {
+	        String line = br.readLine( );
+	        while( line != null )
 	        {
-	        	double valor = Double.parseDouble(partes[ 1 ]);
-	        	String compradorString = partes[ 2 ];
-	            Usuario usuario = laGaleria.ConsultarUsuario(compradorString);
-	            Cliente comprador = (Cliente) usuario;
-	            String piezaString = partes[ 3 ];
-	            Pieza piezaVenta = laGaleria.ConsultarPieza(piezaString);
-
-	            laGaleria.RegistrarVenta(new Venta(valor, comprador, piezaVenta));
+	            String[] partes = line.split( ":" );
+	            if (partes[0].equals("subasta"))
+				{
+	            	int contador = Integer.parseInt(partes[ 1 ]);
+	            	double valorInicial = Double.parseDouble(partes[ 2 ]);
+		            double valorMinimo = Double.parseDouble(partes[ 3 ]);
+		            Pieza piezaSubastada = laGaleria.ConsultarPieza(partes[ 4 ]);
+		            LocalDate tiempoFinal = LocalDate.parse(partes[ 5 ], formatoFecha);
+		            
+		            SubastaPieza subasta = new SubastaPieza(valorInicial, valorMinimo, piezaSubastada, tiempoFinal);
+		            laGaleria.RegistrarSubasta(subasta);
+		            subastas.put(contador, subasta);
+				}
+		        else if (partes[0].equals("venta"))
+		        {
+		        	double valor = Double.parseDouble(partes[ 1 ]);
+		        	String compradorString = partes[ 2 ];
+		            Usuario usuario = laGaleria.ConsultarUsuario(compradorString);
+		            Cliente comprador = (Cliente) usuario;
+		            String piezaString = partes[ 3 ];
+		            Pieza piezaVenta = laGaleria.ConsultarPieza(piezaString);
+		            String medioElegido = partes[ 4 ];
+	
+		            laGaleria.RegistrarVenta(new Venta(valor, comprador, piezaVenta, medioElegido));
+		        }
+		        else if (partes[0].equals("oferta"))
+		        {
+		        	int contador = Integer.parseInt(partes[ 1 ]);
+		        	String compradorString = partes[ 2 ];
+		            Usuario usuario = laGaleria.ConsultarUsuario(compradorString);
+		            Cliente ofertador = (Cliente) usuario;
+		            double valor = Double.parseDouble(partes[ 3 ]);
+		            
+		            SubastaPieza subasta = subastas.get(contador);
+		            subasta.RecibirOferta(new Oferta(ofertador, valor));
+		        }	            
+	            line = br.readLine( );
 	        }
-	        else if (partes[0].equals("oferta"))
-	        {
-	        	int contador = Integer.parseInt(partes[ 1 ]);
-	        	String compradorString = partes[ 2 ];
-	            Usuario usuario = laGaleria.ConsultarUsuario(compradorString);
-	            Cliente ofertador = (Cliente) usuario;
-	            double valor = Double.parseDouble(partes[ 3 ]);
-	            
-	            SubastaPieza subasta = subastas.get(contador);
-	            subasta.RecibirOferta(new Oferta(ofertador, valor));
-	        }	            
-            line = br.readLine( );
+	        br.close( );
+		} catch (IOException e) {
+            e.printStackTrace();
         }
-        br.close( );
 	}
 	
 	public void salvarAcciones(String archivo, Galeria laGaleria) throws IOException {
@@ -102,8 +106,9 @@ public class PersistenciaAcciones implements IPersistenciaAcciones
 			String valor = Double.toString(venta.getValor());
 			String comprador = venta.getComprador().getLogin();
 			String piezaVenta = venta.getPiezaVenta().getCodigo();
+			String medioElegido = venta.getMedioElegido();
 			 
-			writer.println( "venta:" + valor + ":" + comprador + ":" + piezaVenta);
+			writer.println( "venta:" + valor + ":" + comprador + ":" + piezaVenta + ";" + medioElegido);
 	    	
 	    }
 

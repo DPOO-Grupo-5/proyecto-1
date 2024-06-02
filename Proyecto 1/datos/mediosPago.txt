@@ -1,0 +1,3 @@
+galeria.modelo.ventas.medios.PayPal
+galeria.modelo.ventas.medios.Payu
+galeria.modelo.ventas.medios.Sire

@@ -83,7 +83,7 @@ public class PersistenciaUsuarios implements IPersistenciaUsuarios
         				+ cliente.getNombre() + ":" + cliente.getTelefono() + ":" + cliente.getEmail() + ":" 
         				+ capacidadAdquisitiva + ":" + valorMaximo + ":" + verificado + ":" + piezas);
         	}
-        	else if (usuario instanceof Cliente){
+        	else if (usuario instanceof Empleado){
         		Empleado empleado = (Empleado) usuario;
         		
         		String rol = empleado.getRol().toString();

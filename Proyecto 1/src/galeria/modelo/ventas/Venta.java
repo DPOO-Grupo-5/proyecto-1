@@ -2,11 +2,14 @@ package galeria.modelo.ventas;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
 import java.util.Date;
 
 import galeria.modelo.pieza.Estado;
 import galeria.modelo.pieza.Pieza;
 import galeria.modelo.usuario.Cliente;
+import galeria.modelo.ventas.medios.CargarMediosPago;
+import galeria.modelo.ventas.medios.MedioPago;
 
 /**
  * Esta clase se encarga de realizar las ventas y pagos de las piezas de la galeria
@@ -39,19 +42,14 @@ public class Venta {
 	/**
 	 * Indica la fecha de la venta
 	 */
-	private Date fecha;
+	private LocalDate fecha;
+	
+	private String medioElegido;
 	
 	/**
 	 * Crea una venta relacionando el cliente con el valor y la pieza, en el caso de una subasta. Ademas cambia el estado de la pieza a bloqueado hasta que se efectue el pago
-	 * @throws SecurityException 
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalArgumentException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 * @throws ClassNotFoundException 
 	 */
-	public Venta(double valor, Cliente comprador, Pieza piezaVenta, String medioElegido) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+	public Venta(double valor, Cliente comprador, Pieza piezaVenta, String medioElegido){
 		this.valor = valor;
 		this.comprador = comprador;
 		this.aceptada = false;
@@ -60,27 +58,28 @@ public class Venta {
 		this.fecha = null;
 		this.getPiezaVenta().setEstado(Estado.BLOQUEADO);
 		this.getPiezaVenta().setDisponibilidadVentaDirecta(false);
+		this.medioElegido = medioElegido;
 		
-		Class<?> clase = Class.forName(medioElegido);
-		Constructor<?> constructor = clase.getDeclaredConstructor(Cliente.class, double.class, Date.class);
-				
-		this.medioPago = (MedioPago) constructor.newInstance(this.comprador, this.valor, fecha);
+		this.medioPago = CargarMediosPago.cargarMedioPago(medioElegido, this.comprador, this.valor, this.fecha);
+
 		
 		
 	}
 	/**
 	 * Crea una venta relacionando el cliente y la pieza, en el caso de una venta directa. Ademas cambia el estado de la pieza a bloqueado hasta que se efectue el pago
 	 */
-	public Venta(Cliente comprador, Pieza piezaVenta) {
+	public Venta(Cliente comprador, Pieza piezaVenta, String medioElegido) {
 		this.valor = piezaVenta.getValorFijoVentaDirecta();
 		this.comprador = comprador;
 		this.aceptada = false;
 		this.activo = false;
-		this.medioPago = null;
 		this.piezaVenta = piezaVenta;
 		this.fecha = null;
 		this.getPiezaVenta().setEstado(Estado.BLOQUEADO);
 		this.getPiezaVenta().setDisponibilidadVentaDirecta(false);
+		this.medioElegido = medioElegido;
+		
+		this.medioPago = CargarMediosPago.cargarMedioPago(medioElegido, this.comprador, this.valor, this.fecha);
 	}
 	
 	public double getValor() {
@@ -120,12 +119,20 @@ public class Venta {
 		this.piezaVenta = piezaVenta;
 	}
 
-	public Date getFecha() {
+	public LocalDate getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(LocalDate fecha) {
 		this.fecha = fecha;
+	}
+	
+	public String getMedioElegido() {
+		return medioElegido;
+	}
+
+	public void setMedioElegido(String medioElegido) {
+		this.medioElegido = medioElegido;
 	}
 	
 	/**
@@ -152,7 +159,7 @@ public class Venta {
 		if(venta.descontarPago(venta)) {
 			venta.setAceptada(true);
 			venta.getPiezaVenta().setEstado(Estado.VENDIDO);
-			Date datenow = new Date();
+			LocalDate datenow = LocalDate.now();
 			venta.setFecha(datenow);
 			venta.getPiezaVenta().setPropietario(venta.getComprador());
 			return true;
@@ -163,4 +170,6 @@ public class Venta {
 			return false;
 		}
 	}
+	
+	
 }

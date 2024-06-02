@@ -44,6 +44,7 @@ public class ConsolaCliente extends ConsolaBasica
                 "Ofertar en una subasta",
                 "Demostrar nuevos ingresos",
                 "Comprar pieza",
+                "Comprar pieza por oferta ganadora en subasta",
                 "Cerrar sesión",
                 "Eliminar cuenta"
             });
@@ -76,11 +77,14 @@ public class ConsolaCliente extends ConsolaBasica
                     comprarPieza();
                     break;
                 case 9:
+                    comprarPiezaSubasta();
+                    break;
+                case 10:
                     // Cerrar sesión
                 	cerrarSesion();
                     continuar = false;
                     break;
-                case 10:
+                case 11:
                     eliminarCuenta();
                     continuar = false;
                     break;
@@ -163,8 +167,31 @@ public class ConsolaCliente extends ConsolaBasica
     private void comprarPieza()
     {
         this.piezasDisponiblesVenta();
-        String codigo = pedirCadenaAlUsuario("Codiga de la pieza que se quiere ofertar");
-        Venta venta = new Venta(this.laGaleria.ConsultarCliente(codigo), this.laGaleria.ConsultarPieza(codigo));
+        String codigo = pedirCadenaAlUsuario("Codiga de la pieza que se quiere ofertar: ");
+        String medioPago = pedirCadenaAlUsuario("Seleccione un medio de pago (PayPal, Payu, Sire): ");
+        Venta venta = new Venta(this.laGaleria.ConsultarCliente(codigo), this.laGaleria.ConsultarPieza(codigo), medioPago);
+        laGaleria.RegistrarVenta(venta);
+        System.out.println("Se registro su deseo de compra, debe esperar a que el administrador autorice la venta.");
+        
+    }
+    
+    private void comprarPiezaSubasta()
+    {
+    	for(SubastaPieza pieza : this.laGaleria.getSubastas()) {
+    		for (Oferta oferta : pieza.getOfertas()) {
+    			if (oferta.getOfertador().getLogin().equals(login)) {
+    				if (oferta.isEsGanador()) {
+    					String medioPago = pedirCadenaAlUsuario("Seleccione un medio de pago (PayPal, Payu, Sire): ");
+    					laGaleria.VenderPiezaSubasta(pieza, medioPago);
+    				}
+    			}
+    		}
+    	}
+        this.piezasDisponiblesVenta();
+        String codigo = pedirCadenaAlUsuario("Codiga de la pieza que se quiere ofertar: ");
+        String medioPago = pedirCadenaAlUsuario("Seleccione un medio de pago (PayPal, Payu, Sire): ");
+        Venta venta = new Venta(this.laGaleria.ConsultarCliente(codigo), this.laGaleria.ConsultarPieza(codigo), medioPago);
+        laGaleria.RegistrarVenta(venta);
         System.out.println("Se registro su deseo de compra, debe esperar a que el administrador autorice la venta.");
         
     }

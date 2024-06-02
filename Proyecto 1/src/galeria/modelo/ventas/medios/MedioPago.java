@@ -1,4 +1,4 @@
-package galeria.modelo.ventas;
+package galeria.modelo.ventas.medios;
 
 import java.time.LocalDate;
 
@@ -9,6 +9,6 @@ import galeria.modelo.usuario.Cliente;
  */
 public interface MedioPago {
 
-	boolean ProcesarPago(Cliente comprador, double valor, LocalDate fecha, String numeroCuenta, String numeroTransaccion);
+	boolean procesarPago(Cliente comprador, double valor, LocalDate fecha, String numeroCuenta, String numeroTransaccion);
 	
 }
